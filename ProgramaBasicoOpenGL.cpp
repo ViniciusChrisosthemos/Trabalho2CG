@@ -13,6 +13,7 @@
 #include <ctime>
 #include <Vector3.h>
 #include <Camera.h>
+
 using namespace std;
 
 #ifdef WIN32
@@ -31,6 +32,15 @@ using namespace std;
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,0,0), new Vector3(0,0,-8));
 Vector3* pos2 = new Vector3(5,0,0);
+
+
+void LoadObject(Triangle triangles[], int modelSize);
+
+void LoadObject(Triangle triangles[], int modelSize)
+{
+
+}
+
 // **********************************************************************
 //  void DefineLuz(void)
 //
@@ -286,16 +296,13 @@ void arrow_keys ( int a_keys, int x, int y )
 {
 	switch ( a_keys )
 	{
-		case GLUT_KEY_UP:       // When Up Arrow Is Pressed...
-			glutFullScreen ( ); // Go Into Full Screen Mode
+		case GLUT_KEY_UP:
 			break;
-	    case GLUT_KEY_DOWN:     // When Down Arrow Is Pressed...
-			glutInitWindowSize  ( 700, 500 );
+	    case GLUT_KEY_DOWN:
 			break;
         case GLUT_KEY_LEFT:
-            mainCamera->SetObserver(pos2);
-            cout << mainCamera->observer->x << " " << mainCamera->observer->y << " " << mainCamera->observer->z;
-            cout << mainCamera->target->x << " " << mainCamera->target->y << " " << mainCamera->target->z;
+			break;
+        case GLUT_KEY_RIGHT:
 			break;
 		default:
 			break;
