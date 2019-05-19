@@ -2,6 +2,11 @@
 #define TRIANGLE_H
 #include <Vector3.h>
 
+// **********************************************************************
+//  Class Triangle
+//
+//  Classe que representa um triangulo
+// **********************************************************************
 class Triangle
 {
     public:

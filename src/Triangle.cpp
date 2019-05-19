@@ -10,8 +10,5 @@ Triangle::Triangle(Vector3* v1, Vector3* v2, Vector3* v3)
 
 Triangle::~Triangle()
 {
-    for(int i=0; i<3; i++)
-    {
-        delete vertexs[i];
-    }
+    delete [] vertexs;
 }

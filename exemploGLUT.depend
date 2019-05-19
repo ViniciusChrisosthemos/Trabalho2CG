@@ -293,10 +293,14 @@
 
 1558294976 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
 
-1558294466 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
+1558296653 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
 	"Object.h"
+	<Triangle.h>
+	<Vector3.h>
 
-1558294466 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
+1558296445 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
+	<Triangle.h>
+	<Vector3.h>
 
 1558295308 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
 	"Triangle.h"

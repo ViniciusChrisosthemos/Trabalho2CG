@@ -13,5 +13,6 @@ Object::Object(int modelSize)
 
 Object::~Object()
 {
-    //dtor
+    delete [] triangles;
+    delete position;
 }
