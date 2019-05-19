@@ -1,107 +1,282 @@
 // **********************************************************************
-// PUCRS/FACIN
-// COMPUTAÇÃO GRÁFICA
+// PUCRS/Escola PolitŽcnica
+// COMPUTA‚ÌO GRçFICA
 //
-// Programa básico para criar aplicações em OpenGL
+// Programa b‡sico para criar aplicacoes 3D em OpenGL
 //
 // Marcio Sarroglia Pinho
-// pinho@inf.pucrs.br
+// pinho@pucrs.br
 // **********************************************************************
 
 #include <iostream>
+#include <cmath>
+#include <ctime>
+#include <Vector3.h>
+
+using namespace std;
+
+#ifdef WIN32
 #include <windows.h>
 #include "gl\glut.h"
+    static DWORD last_idle_time;
+#else
+    #include <sys/time.h>
+    static struct timeval last_idle_time;
+#endif
 
-using std::cout;
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#endif
+
+GLfloat AspectRatio, AngY=0;
+Vector3* obs = new Vector3(0,0,0);
+Vector3* target = new Vector3(0,0,-8);
+// **********************************************************************
+//  void DefineLuz(void)
+//
+//
+// **********************************************************************
+void DefineLuz(void)
+{
+  // Define cores para um objeto dourado
+  GLfloat LuzAmbiente[]   = {0.4, 0.4, 0.4f } ;
+  GLfloat LuzDifusa[]   = {0.7, 0.7, 0.7};
+  GLfloat LuzEspecular[] = {0.9f, 0.9f, 0.9 };
+  GLfloat PosicaoLuz0[]  = {3.0f, 3.0f, 0.0f };
+  GLfloat Especularidade[] = {1.0f, 1.0f, 1.0f};
+
+   // ****************  Fonte de Luz 0
+
+ glEnable ( GL_COLOR_MATERIAL );
+
+   // Habilita o uso de iluminação
+  glEnable(GL_LIGHTING);
+
+  // Ativa o uso da luz ambiente
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente);
+  // Define os parametros da luz nœmero Zero
+  glLightfv(GL_LIGHT0, GL_AMBIENT, LuzAmbiente);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, LuzDifusa  );
+  glLightfv(GL_LIGHT0, GL_SPECULAR, LuzEspecular  );
+  glLightfv(GL_LIGHT0, GL_POSITION, PosicaoLuz0 );
+  glEnable(GL_LIGHT0);
+
+  // Ativa o "Color Tracking"
+  glEnable(GL_COLOR_MATERIAL);
+
+  // Define a reflectancia do material
+  glMaterialfv(GL_FRONT,GL_SPECULAR, Especularidade);
+
+  // Define a concentra‹oo do brilho.
+  // Quanto maior o valor do Segundo parametro, mais
+  // concentrado ser‡ o brilho. (Valores v‡lidos: de 0 a 128)
+  glMateriali(GL_FRONT,GL_SHININESS,51);
+
+}
+
 
 // **********************************************************************
 //  void init(void)
-//  Inicializa os parâmetros globais de OpenGL
+//		Inicializa os parâmetros globais de OpenGL
 //
 // **********************************************************************
 void init(void)
 {
-	// Define a cor do fundo da tela (AZUL)
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Fundo de tela preto
+
+	glShadeModel(GL_SMOOTH);
+	glColorMaterial ( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
+	glEnable(GL_DEPTH_TEST);
+	glEnable ( GL_CULL_FACE );
+
+    // Obtem o tempo inicial
+#ifdef WIN32
+    last_idle_time = GetTickCount();
+#else
+    gettimeofday (&last_idle_time, NULL);
+#endif
 
 }
+// **********************************************************************
+//  void PosicUser()
+//
+//
+// **********************************************************************
+void PosicUser()
+{
+	// Set the clipping volume
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(90,AspectRatio,0.01,200);
 
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(obs->x, obs->y, obs->z,
+		      target->x,target->y,target->z,
+			  0.0f,1.0f,0.0f);
+
+}
 // **********************************************************************
 //  void reshape( int w, int h )
-//  trata o redimensionamento da janela OpenGL
+//		trata o redimensionamento da janela OpenGL
 //
 // **********************************************************************
 void reshape( int w, int h )
 {
-    // Reset the coordinate system before modifying
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    // Define a área a ser ocupada pela área OpenGL dentro da Janela
+
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window of zero width).
+	if(h == 0)
+		h = 1;
+
+	AspectRatio = 1.0f * w / h;
+	// Reset the coordinate system before modifying
+	glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	// Set the viewport to be the entire window
     glViewport(0, 0, w, h);
 
-    // Define os limites lógicos da área OpenGL dentro da Janela
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glOrtho(0,10,0,10,0,1);
-}
+	PosicUser();
 
+}
+// **********************************************************************
+//  void DesenhaCubo()
+//
+//
+// **********************************************************************
+void DesenhaCubo()
+{
+	glBegin ( GL_QUADS );
+		// Front Face
+		glNormal3f(0,0,1);
+		glVertex3f(-1.0f, -1.0f,  1.0f);
+		glVertex3f( 1.0f, -1.0f,  1.0f);
+		glVertex3f( 1.0f,  1.0f,  1.0f);
+		glVertex3f(-1.0f,  1.0f,  1.0f);
+		// Back Face
+		glNormal3f(0,0,-1);
+		glVertex3f(-1.0f, -1.0f, -1.0f);
+		glVertex3f(-1.0f,  1.0f, -1.0f);
+		glVertex3f( 1.0f,  1.0f, -1.0f);
+		glVertex3f( 1.0f, -1.0f, -1.0f);
+		// Top Face
+		glNormal3f(0,1,0);
+		glVertex3f(-1.0f,  1.0f, -1.0f);
+		glVertex3f(-1.0f,  1.0f,  1.0f);
+		glVertex3f( 1.0f,  1.0f,  1.0f);
+		glVertex3f( 1.0f,  1.0f, -1.0f);
+		// Bottom Face
+		glNormal3f(0,-1,0);
+		glVertex3f(-1.0f, -1.0f, -1.0f);
+		glVertex3f( 1.0f, -1.0f, -1.0f);
+		glVertex3f( 1.0f, -1.0f,  1.0f);
+		glVertex3f(-1.0f, -1.0f,  1.0f);
+		// Right face
+		glNormal3f(1,0,0);
+		glVertex3f( 1.0f, -1.0f, -1.0f);
+		glVertex3f( 1.0f,  1.0f, -1.0f);
+		glVertex3f( 1.0f,  1.0f,  1.0f);
+		glVertex3f( 1.0f, -1.0f,  1.0f);
+		// Left Face
+		glNormal3f(-1,0,0);
+		glVertex3f(-1.0f, -1.0f, -1.0f);
+		glVertex3f(-1.0f, -1.0f,  1.0f);
+		glVertex3f(-1.0f,  1.0f,  1.0f);
+		glVertex3f(-1.0f,  1.0f, -1.0f);
+	glEnd();
+}
 // **********************************************************************
 //  void display( void )
+//
 //
 // **********************************************************************
 void display( void )
 {
 
-	// Limpa a tela coma cor de fundo
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    // Define os limites lógicos da área OpenGL dentro da Janela
+	DefineLuz();
+
+	PosicUser();
+
 	glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glOrtho(0,10,0,10,0,1);
 
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	// Coloque aqui as chamadas das rotinas que desenha os objetos
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	glPushMatrix();
+		glTranslatef ( 1.0f, 0.0f, -5.0f );
+        glRotatef(AngY,0,1,0);
+		glColor3f(0.5f,0.0f,0.0f); // Vermelho
+		DesenhaCubo();
+	glPopMatrix();
 
-	glLineWidth(3);
-	glColor3f(1,0,0);
 
-	glBegin(GL_LINES);
-	  glVertex2f(0,0);
-	  glVertex2f(5,5);
-	glEnd();
-
-	glLineWidth(3);
-	glColor3f(0,1,0);
-	glBegin(GL_LINES);
-	  glVertex2f(5,5);
-	  glVertex2f(10,0);
-	glEnd();
+	glPushMatrix();
+		glTranslatef ( -1.0f, 2.0f, -8.0f );
+		glRotatef(AngY,0,1,0);
+		glColor3f(0.0f,0.6f,0.0f); // Verde
+		DesenhaCubo();
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
 
+// **********************************************************************
+//  void animate ( unsigned char key, int x, int y )
+//
+//
+// **********************************************************************
+void animate()
+{
+    static float dt;
+    static float AccumTime=0;
+
+#ifdef _WIN32
+    DWORD time_now;
+    time_now = GetTickCount();
+    dt = (float) (time_now - last_idle_time) / 1000.0;
+#else
+    // Figure out time elapsed since last call to idle function
+    struct timeval time_now;
+    gettimeofday(&time_now, NULL);
+    dt = (float)(time_now.tv_sec  - last_idle_time.tv_sec) +
+    1.0e-6*(time_now.tv_usec - last_idle_time.tv_usec);
+#endif
+    AccumTime +=dt;
+    if (AccumTime >=3) // imprime o FPS a cada 3 segundos
+    {
+        cout << 1.0/dt << " FPS"<< endl;
+        AccumTime = 0;
+    }
+    //cout << "AccumTime: " << AccumTime << endl;
+    // Anima cubos
+    AngY++;
+    // Sa;va o tempo para o pr—ximo ciclo de rendering
+    last_idle_time = time_now;
+
+        //if  (GetAsyncKeyState(32) & 0x8000) != 0)
+          //  cout << "Espaco Pressionado" << endl;
+
+    // Redesenha
+    glutPostRedisplay();
+}
 
 // **********************************************************************
 //  void keyboard ( unsigned char key, int x, int y )
 //
+//
 // **********************************************************************
-
 void keyboard ( unsigned char key, int x, int y )
 {
-
 	switch ( key )
 	{
-		case 27:        // Termina o programa qdo
-			exit ( 0 );   // a tecla ESC for pressionada
-			break;
+    case 27:        // Termina o programa qdo
+      exit ( 0 );   // a tecla ESC for pressionada
+      break;
 
-		default:
-			break;
-	}
+    default:
+            cout << key;
+      break;
+  }
 }
-
 
 // **********************************************************************
 //  void arrow_keys ( int a_keys, int x, int y )
@@ -112,13 +287,11 @@ void arrow_keys ( int a_keys, int x, int y )
 {
 	switch ( a_keys )
 	{
-		case GLUT_KEY_UP:       // Se pressionar UP
-			glutFullScreen ( ); // Vai para Full Screen
+		case GLUT_KEY_UP:       // When Up Arrow Is Pressed...
+			glutFullScreen ( ); // Go Into Full Screen Mode
 			break;
-	    case GLUT_KEY_DOWN:     // Se pressionar UP
-								// Reposiciona a janela
-            glutPositionWindow (50,50);
-			glutReshapeWindow ( 700, 500 );
+	    case GLUT_KEY_DOWN:     // When Down Arrow Is Pressed...
+			glutInitWindowSize  ( 700, 500 );
 			break;
 		default:
 			break;
@@ -130,51 +303,25 @@ void arrow_keys ( int a_keys, int x, int y )
 //
 //
 // **********************************************************************
-int  main ( int argc, char** argv )
+int main ( int argc, char** argv )
 {
-    glutInit            ( &argc, argv );
-    glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
-    glutInitWindowPosition (0,0);
+	glutInit            ( &argc, argv );
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
+	glutInitWindowPosition (0,0);
+	glutInitWindowSize  ( 700, 500 );
+	glutCreateWindow    ( "Computacao Grafica - Exemplo Basico 3D" );
 
-    // Define o tamanho inicial da janela grafica do programa
-    glutInitWindowSize  ( 650, 500);
+	init ();
+    //system("pwd");
 
-    // Cria a janela na tela, definindo o nome da
-    // que aparecera na barra de título da janela.
-    glutCreateWindow    ( "Primeiro Programa em OpenGL" );
+	glutDisplayFunc ( display );
+	glutReshapeFunc ( reshape );
+	glutKeyboardFunc ( keyboard );
+	glutSpecialFunc ( arrow_keys );
+	glutIdleFunc ( animate );
 
-    // executa algumas inicializações
-    init ();
-
-
-    // Define que o tratador de evento para
-    // o redesenho da tela. A funcao "display"
-    // será chamada automaticamente quando
-    // for necessário redesenhar a janela
-    glutDisplayFunc ( display );
-
-    // Define que o tratador de evento para
-    // o redimensionamento da janela. A funcao "reshape"
-    // será chamada automaticamente quando
-    // o usuário alterar o tamanho da janela
-    glutReshapeFunc ( reshape );
-
-    // Define que o tratador de evento para
-    // as teclas. A funcao "keyboard"
-    // será chamada automaticamente sempre
-    // o usuário pressionar uma tecla comum
-    glutKeyboardFunc ( keyboard );
-
-    // Define que o tratador de evento para
-    // as teclas especiais(F1, F2,... ALT-A,
-    // ALT-B, Teclas de Seta, ...).
-    // A funcao "arrow_keys" será chamada
-    // automaticamente sempre o usuário
-    // pressionar uma tecla especial
-    glutSpecialFunc ( arrow_keys );
-
-    // inicia o tratamento dos eventos
-    glutMainLoop ( );
-
-    return 0;
+	glutMainLoop ( );
+	return 0;
 }
+
+

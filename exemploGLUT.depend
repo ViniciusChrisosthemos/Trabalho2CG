@@ -264,3 +264,27 @@
 	<_mingw.h>
 	<stdlib.h>
 
+1300132520 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+	<iostream>
+	<windows.h>
+	"gl\glut.h"
+
+1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\glut.h
+	"freeglut.h"
+
+1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut_std.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut_ext.h
+
+1558293387 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
+	"Vector3.h"
+
+1558293369 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
+
