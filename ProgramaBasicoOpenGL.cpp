@@ -13,7 +13,7 @@
 #include <ctime>
 #include <Vector3.h>
 #include <Camera.h>
-
+#include <Triangle.h>
 using namespace std;
 
 #ifdef WIN32

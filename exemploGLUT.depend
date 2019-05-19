@@ -264,12 +264,13 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1558297597 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1558298696 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
 	<Vector3.h>
 	<Camera.h>
+	<Triangle.h>
 	<windows.h>
 	"gl\glut.h"
 	<sys/time.h>
@@ -292,7 +293,7 @@
 1558295172 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 
-1558294976 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
+1558298789 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
 
 1558296653 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
 	"Object.h"
@@ -307,10 +308,10 @@
 	"Triangle.h"
 	<Vector3.h>
 
-1558296766 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
+1558298793 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
 	<Vector3.h>
 
-1558297238 source:c:\users\vinic\desktop\git\trabalho2cg\src\camera.cpp
+1558297813 source:c:\users\vinic\desktop\git\trabalho2cg\src\camera.cpp
 	"Camera.h"
 
 1558297827 c:\users\vinic\desktop\git\trabalho2cg\include\camera.h
