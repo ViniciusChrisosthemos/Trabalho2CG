@@ -264,13 +264,15 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1558298696 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1558309155 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
+	<fstream>
 	<Vector3.h>
 	<Camera.h>
 	<Triangle.h>
+	<Model.h>
 	<windows.h>
 	"gl\glut.h"
 	<sys/time.h>
@@ -295,25 +297,37 @@
 
 1558298789 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
 
-1558296653 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
+1558305073 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
 	"Object.h"
 	<Triangle.h>
 	<Vector3.h>
 
-1558296445 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
+1558304844 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
 	<Triangle.h>
 	<Vector3.h>
 
-1558296725 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
+1558306755 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
 	"Triangle.h"
 	<Vector3.h>
 
-1558298793 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
+1558308867 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
 	<Vector3.h>
+	<ColorRGB.h>
 
 1558297813 source:c:\users\vinic\desktop\git\trabalho2cg\src\camera.cpp
 	"Camera.h"
 
 1558297827 c:\users\vinic\desktop\git\trabalho2cg\include\camera.h
 	<Vector3.h>
+
+1558306707 source:c:\users\vinic\desktop\git\trabalho2cg\src\model.cpp
+	"Model.h"
+
+1558306726 c:\users\vinic\desktop\git\trabalho2cg\include\model.h
+	<Triangle.h>
+
+1558309588 c:\users\vinic\desktop\git\trabalho2cg\include\colorrgb.h
+
+1558309305 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
+	"ColorRGB.h"
 

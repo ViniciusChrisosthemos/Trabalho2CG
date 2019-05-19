@@ -11,13 +11,11 @@
 class Object
 {
     public:
-        Triangle triangles[];
-        int modelSize;
         float angle;
         Vector3* position;
         bool inGame;
 
-        Object(int modelSize);
+        Object();
         virtual ~Object();
 
     protected:

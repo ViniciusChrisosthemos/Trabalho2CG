@@ -11,9 +11,11 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include <fstream>
 #include <Vector3.h>
 #include <Camera.h>
 #include <Triangle.h>
+#include <Model.h>
 using namespace std;
 
 #ifdef WIN32
@@ -32,15 +34,96 @@ using namespace std;
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,0,0), new Vector3(0,0,-8));
 Vector3* pos2 = new Vector3(5,0,0);
+Model* model = new Model();
+
+void LoadModel(Model* model, char* name);
+void DrawModel(Model* model);
+void DrawTriangle(Triangle* triangle);
+void SetColor(string hex, ColorRGB* colorRGB);
 
 
-void LoadObject(Triangle triangles[], int modelSize);
-
-void LoadObject(Triangle triangles[], int modelSize)
+void SetColor(string hex, ColorRGB* colorRGB)
 {
+    char color[2];
+    color[2] = hex[2];
+    color[3] = hex[3];
+    colorRGB->r = ((float) strtol(color, 0, 16))/255.0f;
 
+    color[4] = hex[4];
+    color[5] = hex[5];
+    colorRGB->g = ((float) strtol(color, 0, 16))/255.0f;
+
+    color[6] = hex[6];
+    color[7] = hex[7];
+    colorRGB->b = ((float) strtol(color, 0, 16))/255.0f;
 }
 
+void LoadModel(Model* model, char* name)
+{
+    ifstream file;
+    file.open(name);
+    float x,y,z;
+    int triangle,vertex;
+    ColorRGB* color;
+    string hex;
+
+    if(file ==  NULL)
+    {
+        cout << name << " não encontrado!!!\n";
+        return;
+    }
+
+    file >> model->modelSize;
+    model->triangles = new Triangle[model->modelSize];
+
+    for(triangle=0; triangle<model->modelSize; triangle++)
+    {
+        color = new ColorRGB();
+        for(vertex=0; vertex<3; vertex++)
+        {
+            file >> x;
+            file >> y;
+            file >> z;
+
+            model->triangles[triangle].SetVertex(vertex, new Vector3(x,y,z));
+        }
+
+        file >> hex;
+        SetColor(hex, color);
+        model->triangles[triangle].color = color;
+    }
+
+    file.close();
+}
+
+void DrawModel(Model* model)
+{
+    glPushMatrix();
+    {
+        glTranslated(0,0,-8);
+        glRotatef(AngY,0,1,0);
+        for(int triangle = 0; triangle < model->modelSize; triangle++)
+        {
+            glColor3f(model->triangles[triangle].color->r,
+                      model->triangles[triangle].color->g,
+                      model->triangles[triangle].color->b);
+            DrawTriangle(&(model->triangles[triangle]));
+        }
+    }
+    glPopMatrix();
+}
+
+void DrawTriangle(Triangle* triangle)
+{
+    glBegin(GL_TRIANGLES);
+    {
+        for(int i=0; i<3; i++)
+        {
+            glVertex3f(triangle->vertexs[i]->x,triangle->vertexs[i]->y, triangle->vertexs[i]->z);
+        }
+    }
+    glEnd();
+}
 // **********************************************************************
 //  void DefineLuz(void)
 //
@@ -209,22 +292,23 @@ void display( void )
 	PosicUser();
 
 	glMatrixMode(GL_MODELVIEW);
-
+/*
 	glPushMatrix();
 		glTranslatef ( 1.0f, 0.0f, -5.0f );
         glRotatef(AngY,0,1,0);
 		glColor3f(0.5f,0.0f,0.0f); // Vermelho
 		DesenhaCubo();
 	glPopMatrix();
-
-
+*/
+    DrawModel(model);
+/*
 	glPushMatrix();
 		glTranslatef ( -1.0f, 2.0f, -8.0f );
 		glRotatef(AngY,0,1,0);
 		glColor3f(0.0f,0.6f,0.0f); // Verde
 		DesenhaCubo();
 	glPopMatrix();
-
+*/
 	glutSwapBuffers();
 }
 
@@ -316,6 +400,9 @@ void arrow_keys ( int a_keys, int x, int y )
 // **********************************************************************
 int main ( int argc, char** argv )
 {
+    char name[] = "ferrari.tri";
+    LoadModel(model, name);
+
 	glutInit            ( &argc, argv );
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
 	glutInitWindowPosition (0,0);
