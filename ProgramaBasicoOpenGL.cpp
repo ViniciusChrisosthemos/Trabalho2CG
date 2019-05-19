@@ -12,7 +12,7 @@
 #include <cmath>
 #include <ctime>
 #include <Vector3.h>
-
+#include <Camera.h>
 using namespace std;
 
 #ifdef WIN32
@@ -29,7 +29,8 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-
+Camera* mainCamera = new Camera(new Vector3(0,0,0), new Vector3(0,0,-8));
+Vector3* pos2 = new Vector3(5,0,0);
 // **********************************************************************
 //  void DefineLuz(void)
 //
@@ -109,8 +110,8 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 0,
-		      0,0,-8,
+	gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
+		      mainCamera->target->x,mainCamera->target->y,mainCamera->target->z,
 			  0.0f,1.0f,0.0f);
 
 }
@@ -290,6 +291,11 @@ void arrow_keys ( int a_keys, int x, int y )
 			break;
 	    case GLUT_KEY_DOWN:     // When Down Arrow Is Pressed...
 			glutInitWindowSize  ( 700, 500 );
+			break;
+        case GLUT_KEY_LEFT:
+            mainCamera->SetObserver(pos2);
+            cout << mainCamera->observer->x << " " << mainCamera->observer->y << " " << mainCamera->observer->z;
+            cout << mainCamera->target->x << " " << mainCamera->target->y << " " << mainCamera->target->z;
 			break;
 		default:
 			break;
