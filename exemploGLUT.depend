@@ -264,10 +264,15 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1300132520 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1558294633 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
+	<cmath>
+	<ctime>
+	<Vector3.h>
 	<windows.h>
 	"gl\glut.h"
+	<sys/time.h>
+	<GLUT/glut.h>
 
 1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\glut.h
 	"freeglut.h"
@@ -283,8 +288,20 @@
 
 1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut_ext.h
 
-1558293387 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
+1558295172 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 
-1558293369 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
+1558294976 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
+
+1558294466 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
+	"Object.h"
+
+1558294466 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
+
+1558295308 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
+	"Triangle.h"
+	<Vector3.h>
+
+1558295233 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
+	<Vector3.h>
 

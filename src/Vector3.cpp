@@ -1,10 +1,10 @@
 #include "Vector3.h"
 
-Vector3::Vector3(float _x, float _y, float _z)
+Vector3::Vector3(float x, float y, float z)
 {
-    x = _x;
-    y = _y;
-    z = _z;
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
 
 Vector3::~Vector3()

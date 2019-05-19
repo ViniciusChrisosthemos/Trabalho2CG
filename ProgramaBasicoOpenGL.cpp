@@ -29,8 +29,7 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-Vector3* obs = new Vector3(0,0,0);
-Vector3* target = new Vector3(0,0,-8);
+
 // **********************************************************************
 //  void DefineLuz(void)
 //
@@ -74,7 +73,6 @@ void DefineLuz(void)
 
 }
 
-
 // **********************************************************************
 //  void init(void)
 //		Inicializa os parâmetros globais de OpenGL
@@ -111,8 +109,8 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(obs->x, obs->y, obs->z,
-		      target->x,target->y,target->z,
+	gluLookAt(0, 0, 0,
+		      0,0,-8,
 			  0.0f,1.0f,0.0f);
 
 }
