@@ -331,7 +331,7 @@
 1558309305 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
-1558361290 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
+1558362164 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -350,11 +350,11 @@
 1558356643 c:\users\17204102\desktop\trabalho2cg\include\camera.h
 	<Vector3.h>
 
-1558360077 c:\users\17204102\desktop\trabalho2cg\include\triangle.h
+1558362200 c:\users\17204102\desktop\trabalho2cg\include\triangle.h
 	<Vector3.h>
 	<ColorRGB.h>
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\colorrgb.h
+1558361817 c:\users\17204102\desktop\trabalho2cg\include\colorrgb.h
 
 1558356643 c:\users\17204102\desktop\trabalho2cg\include\model.h
 	<Triangle.h>
@@ -388,13 +388,14 @@
 1558360223 source:c:\users\17204102\desktop\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 
-1558356938 source:c:\users\17204102\desktop\trabalho2cg\src\colorrgb.cpp
+1558361873 source:c:\users\17204102\desktop\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
 1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\model.cpp
 	"Model.h"
 
-1558360232 source:c:\users\17204102\desktop\trabalho2cg\src\triangle.cpp
+1558362237 source:c:\users\17204102\desktop\trabalho2cg\src\triangle.cpp
 	"Triangle.h"
 	<Vector3.h>
+	<ColorRGB.h>
 

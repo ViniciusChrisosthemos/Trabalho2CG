@@ -10,6 +10,7 @@ class ColorRGB
         float b;
 
         ColorRGB();
+        ColorRGB(float r, float g, float b);
         virtual ~ColorRGB();
 
     protected:

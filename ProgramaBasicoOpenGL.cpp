@@ -32,14 +32,13 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-Camera* mainCamera = new Camera(new Vector3(0,3,0), new Vector3(0,0,-8));
-Vector3* pos2 = new Vector3(5,0,0);
-Model* model = new Model();
+Camera mainCamera = Camera(new Vector3(0,3,0), new Vector3(0,0,-8));
+Model model = Model();
 
-void LoadModel(Model* model, char* name);
-void DrawModel(const Model* model);
-void DrawTriangle(const Triangle* triangle);
-void SetColor(string hex, ColorRGB* colorRGB);
+void LoadModel(Model &model, char* name);
+void DrawModel(const Model &model);
+void DrawTriangle(const Triangle &triangle);
+void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void UnitVector(Vector3 &vect);
@@ -67,42 +66,43 @@ void ProdVector(const Vector3 &v1, const Vector3 &v2, Vector3 &prodVect)
 
 void GetNormalVector(Triangle &triangle)
 {
-    Vector3 vet1 = Vector3(triangle.vertexs[1]->x - triangle.vertexs[0]->x,
-                           triangle.vertexs[1]->y - triangle.vertexs[0]->y,
-                           triangle.vertexs[1]->z - triangle.vertexs[0]->z);
+    Vector3 vet1 = Vector3(triangle.vertexs[1].x - triangle.vertexs[0].x,
+                           triangle.vertexs[1].y - triangle.vertexs[0].y,
+                           triangle.vertexs[1].z - triangle.vertexs[0].z);
 
-    Vector3 vet2 = Vector3(triangle.vertexs[2]->x - triangle.vertexs[0]->x,
-                           triangle.vertexs[2]->y - triangle.vertexs[0]->y,
-                           triangle.vertexs[2]->z - triangle.vertexs[0]->z);
+    Vector3 vet2 = Vector3(triangle.vertexs[2].x - triangle.vertexs[0].x,
+                           triangle.vertexs[2].y - triangle.vertexs[0].y,
+                           triangle.vertexs[2].z - triangle.vertexs[0].z);
 
     ProdVector(vet1, vet2, triangle.normal);
     UnitVector(triangle.normal);
 }
 
-void SetColor(string hex, ColorRGB* colorRGB)
+void SetColor(string hex, ColorRGB &colorRGB)
 {
     char color[2];
     color[0] = hex[2];
     color[1] = hex[3];
-    colorRGB->r = ((float) strtol(color, 0, 16))/255.0f;
+    colorRGB.r = ((float) strtol(color, 0, 16))/255.0f;
 
     color[0] = hex[4];
     color[1] = hex[5];
-    colorRGB->g = ((float) strtol(color, 0, 16))/255.0f;
+    colorRGB.g = ((float) strtol(color, 0, 16))/255.0f;
 
     color[0] = hex[6];
     color[1] = hex[7];
-    colorRGB->b = ((float) strtol(color, 0, 16))/255.0f;
+    colorRGB.b = ((float) strtol(color, 0, 16))/255.0f;
 }
 
-void LoadModel(Model* model, char* name)
+void LoadModel(Model &model, char* name)
 {
     ifstream file;
     file.open(name);
     float x,y,z;
     unsigned int triangle,vertex;
-    ColorRGB* color;
+    ColorRGB color;
     string hex;
+    Vector3 vert;
 
     if(file ==  NULL)
     {
@@ -110,54 +110,53 @@ void LoadModel(Model* model, char* name)
         return;
     }
 
-    file >> model->modelSize;
-    model->triangles = new Triangle[model->modelSize];
+    file >> model.modelSize;
+    model.triangles = new Triangle[model.modelSize];
 
-    for(triangle=0; triangle<model->modelSize; triangle++)
+    for(triangle=0; triangle<model.modelSize; triangle++)
     {
-        color = new ColorRGB();
         for(vertex=0; vertex<3; vertex++)
         {
             file >> x;
             file >> y;
             file >> z;
-
-            model->triangles[triangle].SetVertex(vertex, new Vector3(x,y,z));
+            vert = Vector3(x,y,z);
+            model.triangles[triangle].SetVertex(vertex, vert);
         }
 
         file >> hex;
         SetColor(hex, color);
-        model->triangles[triangle].color = color;
-        GetNormalVector(model->triangles[triangle]);
+        model.triangles[triangle].color = color;
+        GetNormalVector(model.triangles[triangle]);
     }
 
     file.close();
 }
 
-void DrawModel(const Model* model)
+void DrawModel(const Model &model)
 {
     glPushMatrix();
     {
         glTranslated(0,0,-8);
         glRotatef(AngY,0,1,0);
-        for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
+        for(unsigned int triangle = 0; triangle < model.modelSize; triangle++)
         {
-            glColor3f(model->triangles[triangle].color->r,
-                      model->triangles[triangle].color->g,
-                      model->triangles[triangle].color->b);
-            DrawTriangle(&(model->triangles[triangle]));
+            glColor3f(model.triangles[triangle].color.r,
+                      model.triangles[triangle].color.g,
+                      model.triangles[triangle].color.b);
+            DrawTriangle(model.triangles[triangle]);
         }
     }
     glPopMatrix();
 }
 
-void DrawTriangle(const Triangle* triangle)
+void DrawTriangle(const Triangle &triangle)
 {
     glBegin(GL_TRIANGLES);
     {
         for(int i=0; i<3; i++)
         {
-            glVertex3f(triangle->vertexs[i]->x,triangle->vertexs[i]->y, triangle->vertexs[i]->z);
+            glVertex3f(triangle.vertexs[i].x,triangle.vertexs[i].y, triangle.vertexs[i].z);
         }
     }
     glEnd();
@@ -241,8 +240,8 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
-		      mainCamera->target->x,mainCamera->target->y,mainCamera->target->z,
+	gluLookAt(mainCamera.observer->x, mainCamera.observer->y, mainCamera.observer->z,
+		      mainCamera.target->x,mainCamera.target->y,mainCamera.target->z,
 			  0.0f,1.0f,0.0f);
 
 }

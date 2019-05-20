@@ -10,13 +10,13 @@
 class Triangle
 {
     public:
-        Vector3* vertexs[3];
-        ColorRGB* color;
+        Vector3 vertexs[3];
+        ColorRGB color;
         Vector3 normal;
 
         Triangle();
         void SetNormal(float x, float y, float z);
-        void SetVertex(int v, Vector3* vertex);
+        void SetVertex(int v, Vector3 &vertex);
         virtual ~Triangle();
 
     protected:
