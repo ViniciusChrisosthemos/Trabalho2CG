@@ -32,29 +32,66 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-Camera* mainCamera = new Camera(new Vector3(0,0,0), new Vector3(0,0,-8));
+Camera* mainCamera = new Camera(new Vector3(0,3,0), new Vector3(0,0,-8));
 Vector3* pos2 = new Vector3(5,0,0);
 Model* model = new Model();
 
 void LoadModel(Model* model, char* name);
-void DrawModel(Model* model);
-void DrawTriangle(Triangle* triangle);
+void DrawModel(const Model* model);
+void DrawTriangle(const Triangle* triangle);
 void SetColor(string hex, ColorRGB* colorRGB);
+void GetNormalVector(Triangle &triangle);
+void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
+void UnitVector(Vector3 &vect);
 
+void UnitVector(Vector3 &vect)
+{
+    float module;
+
+    module = sqrt(vect.x*vect.x + vect.y*vect.y + vect.z*vect.z);
+
+    if(module != 0.0f)
+    {
+        vect.x /= module;
+        vect.y /= module;
+        vect.z /= module;
+    }
+}
+
+void ProdVector(const Vector3 &v1, const Vector3 &v2, Vector3 &prodVect)
+{
+    prodVect.x = v1.y * v2.z - (v1.z * v2.y);
+    prodVect.y = v1.z * v2.x - (v1.x * v2.z);
+    prodVect.z = v1.x * v2.y - (v1.y * v2.x);
+}
+
+void GetNormalVector(Triangle &triangle)
+{
+    Vector3 vet1 = Vector3(triangle.vertexs[1]->x - triangle.vertexs[0]->x,
+                           triangle.vertexs[1]->y - triangle.vertexs[0]->y,
+                           triangle.vertexs[1]->z - triangle.vertexs[0]->z);
+
+    Vector3 vet2 = Vector3(triangle.vertexs[2]->x - triangle.vertexs[0]->x,
+                           triangle.vertexs[2]->y - triangle.vertexs[0]->y,
+                           triangle.vertexs[2]->z - triangle.vertexs[0]->z);
+
+    ProdVector(vet1, vet2, triangle.normal);
+    UnitVector(triangle.normal);
+}
 
 void SetColor(string hex, ColorRGB* colorRGB)
 {
     char color[2];
-    color[2] = hex[2];
-    color[3] = hex[3];
+    color[0] = hex[2];
+    color[1] = hex[3];
     colorRGB->r = ((float) strtol(color, 0, 16))/255.0f;
 
-    color[4] = hex[4];
-    color[5] = hex[5];
+    color[0] = hex[4];
+    color[1] = hex[5];
     colorRGB->g = ((float) strtol(color, 0, 16))/255.0f;
 
-    color[6] = hex[6];
-    color[7] = hex[7];
+    color[0] = hex[6];
+    color[1] = hex[7];
     colorRGB->b = ((float) strtol(color, 0, 16))/255.0f;
 }
 
@@ -63,7 +100,7 @@ void LoadModel(Model* model, char* name)
     ifstream file;
     file.open(name);
     float x,y,z;
-    int triangle,vertex;
+    unsigned int triangle,vertex;
     ColorRGB* color;
     string hex;
 
@@ -91,18 +128,19 @@ void LoadModel(Model* model, char* name)
         file >> hex;
         SetColor(hex, color);
         model->triangles[triangle].color = color;
+        GetNormalVector(model->triangles[triangle]);
     }
 
     file.close();
 }
 
-void DrawModel(Model* model)
+void DrawModel(const Model* model)
 {
     glPushMatrix();
     {
         glTranslated(0,0,-8);
         glRotatef(AngY,0,1,0);
-        for(int triangle = 0; triangle < model->modelSize; triangle++)
+        for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
         {
             glColor3f(model->triangles[triangle].color->r,
                       model->triangles[triangle].color->g,
@@ -113,7 +151,7 @@ void DrawModel(Model* model)
     glPopMatrix();
 }
 
-void DrawTriangle(Triangle* triangle)
+void DrawTriangle(const Triangle* triangle)
 {
     glBegin(GL_TRIANGLES);
     {
@@ -400,7 +438,7 @@ void arrow_keys ( int a_keys, int x, int y )
 // **********************************************************************
 int main ( int argc, char** argv )
 {
-    char name[] = "ferrari.tri";
+    char name[] = "moto_2.tri";
     LoadModel(model, name);
 
 	glutInit            ( &argc, argv );
@@ -419,7 +457,9 @@ int main ( int argc, char** argv )
 	glutIdleFunc ( animate );
 
 	glutMainLoop ( );
+
 	return 0;
+
 }
 
 

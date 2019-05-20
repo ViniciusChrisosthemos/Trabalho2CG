@@ -331,3 +331,70 @@
 1558309305 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
+1558361290 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
+	<iostream>
+	<cmath>
+	<ctime>
+	<fstream>
+	<Vector3.h>
+	<Camera.h>
+	<Triangle.h>
+	<Model.h>
+	<windows.h>
+	"gl\glut.h"
+	<sys/time.h>
+	<GLUT/glut.h>
+
+1558360186 c:\users\17204102\desktop\trabalho2cg\include\vector3.h
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\camera.h
+	<Vector3.h>
+
+1558360077 c:\users\17204102\desktop\trabalho2cg\include\triangle.h
+	<Vector3.h>
+	<ColorRGB.h>
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\colorrgb.h
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\model.h
+	<Triangle.h>
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\glut.h
+	"freeglut.h"
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_std.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_ext.h
+
+1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\camera.cpp
+	"Camera.h"
+
+1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\object.cpp
+	"Object.h"
+	<Triangle.h>
+	<Vector3.h>
+
+1558356643 c:\users\17204102\desktop\trabalho2cg\include\object.h
+	<Triangle.h>
+	<Vector3.h>
+
+1558360223 source:c:\users\17204102\desktop\trabalho2cg\src\vector3.cpp
+	"Vector3.h"
+
+1558356938 source:c:\users\17204102\desktop\trabalho2cg\src\colorrgb.cpp
+	"ColorRGB.h"
+
+1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\model.cpp
+	"Model.h"
+
+1558360232 source:c:\users\17204102\desktop\trabalho2cg\src\triangle.cpp
+	"Triangle.h"
+	<Vector3.h>
+
