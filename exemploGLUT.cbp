@@ -49,10 +49,12 @@
 		</Linker>
 		<Unit filename="ProgramaBasicoOpenGL.cpp" />
 		<Unit filename="include/Camera.h" />
+		<Unit filename="include/ColorRGB.h" />
 		<Unit filename="include/GL/freeglut.h" />
 		<Unit filename="include/GL/freeglut_ext.h" />
 		<Unit filename="include/GL/freeglut_std.h" />
 		<Unit filename="include/GL/glut.h" />
+		<Unit filename="include/Model.h" />
 		<Unit filename="include/Object.h" />
 		<Unit filename="include/Triangle.h" />
 		<Unit filename="include/Vector3.h" />
@@ -63,6 +65,8 @@
 		<Unit filename="include/jversion.h" />
 		<Unit filename="include/xjinclude.h" />
 		<Unit filename="src/Camera.cpp" />
+		<Unit filename="src/ColorRGB.cpp" />
+		<Unit filename="src/Model.cpp" />
 		<Unit filename="src/Object.cpp" />
 		<Unit filename="src/Triangle.cpp" />
 		<Unit filename="src/Vector3.cpp" />

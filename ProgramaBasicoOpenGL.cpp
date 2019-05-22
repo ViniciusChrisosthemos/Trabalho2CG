@@ -32,8 +32,11 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-Camera mainCamera = Camera(new Vector3(0,3,0), new Vector3(0,0,-8));
+Camera* mainCamera = new Camera(new Vector3(0,0,-5), new Vector3(0,0,15));
 Model model = Model();
+float MAXX = 100.0f, MAXY = 100.0f, MAXZ = 100.0f;
+float wcellAmout = 10.0f, hcellAmout = 10.0f;
+float wcell = MAXX/wcellAmout, hcell = MAXY/hcellAmout;
 
 void LoadModel(Model &model, char* name);
 void DrawModel(const Model &model);
@@ -42,6 +45,33 @@ void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void UnitVector(Vector3 &vect);
+void DrawWalls();
+
+void DrawWalls()
+{
+    int line, column;
+    glColor3f(1,0,0);
+    glLineWidth(3);
+    for(line=0; line<MAXY; line+=hcell)
+    {
+        for(column=0; column<MAXX; column+=wcell)
+        {
+            glBegin(GL_LINES);
+            {
+                glVertex3f(column,line,0);
+                glVertex3f(column,line+hcell,0);
+                glVertex3f(column,line+hcell,0);
+                glVertex3f(-column-wcell,line+hcell,0);
+                glVertex3f(-column-wcell,line+hcell,0);
+                glVertex3f(-column-wcell,line,0);
+                glVertex3f(-column-wcell,line,0);
+                glVertex3f(column,line,0);
+            }
+            glEnd();
+        }
+    }
+
+}
 
 void UnitVector(Vector3 &vect)
 {
@@ -137,7 +167,7 @@ void DrawModel(const Model &model)
 {
     glPushMatrix();
     {
-        glTranslated(0,0,-8);
+        glTranslated(0,0,15);
         glRotatef(AngY,0,1,0);
         for(unsigned int triangle = 0; triangle < model.modelSize; triangle++)
         {
@@ -240,9 +270,11 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(mainCamera.observer->x, mainCamera.observer->y, mainCamera.observer->z,
-		      mainCamera.target->x,mainCamera.target->y,mainCamera.target->z,
-			  0.0f,1.0f,0.0f);
+	glRotatef(mainCamera->angle, 0,1,0);
+	    gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
+                  mainCamera->target->x,mainCamera->target->y,mainCamera->target->z,
+                  0.0f,1.0f,0.0f);
+
 
 }
 // **********************************************************************
@@ -337,7 +369,9 @@ void display( void )
 		DesenhaCubo();
 	glPopMatrix();
 */
-    DrawModel(model);
+    //DrawModel(model);
+    glTranslatef(0,0,5);
+    DrawWalls();
 /*
 	glPushMatrix();
 		glTranslatef ( -1.0f, 2.0f, -8.0f );
@@ -422,8 +456,10 @@ void arrow_keys ( int a_keys, int x, int y )
 	    case GLUT_KEY_DOWN:
 			break;
         case GLUT_KEY_LEFT:
+            mainCamera->angle -= 10;
 			break;
         case GLUT_KEY_RIGHT:
+            mainCamera->angle += 10;
 			break;
 		default:
 			break;
