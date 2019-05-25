@@ -2,6 +2,7 @@
 #define OBJECT_H
 #include <Triangle.h>
 #include <Vector3.h>
+#include <Model.h>
 
 // **********************************************************************
 //  Class Object
@@ -11,11 +12,14 @@
 class Object
 {
     public:
+        Vector3 position;
+        Model* model;
         float angle;
-        Vector3* position;
         bool inGame;
 
         Object();
+        void SetObject(Vector3 pos, Model* model, float angle);
+        void Render();
         virtual ~Object();
 
     protected:

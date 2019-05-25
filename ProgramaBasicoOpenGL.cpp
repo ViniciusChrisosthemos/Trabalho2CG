@@ -16,6 +16,8 @@
 #include <Camera.h>
 #include <Triangle.h>
 #include <Model.h>
+#include <GameManager.h>
+
 using namespace std;
 
 #ifdef WIN32
@@ -33,45 +35,16 @@ using namespace std;
 
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,0,-5), new Vector3(0,0,15));
-Model model = Model();
-float MAXX = 100.0f, MAXY = 100.0f, MAXZ = 100.0f;
-float wcellAmout = 10.0f, hcellAmout = 10.0f;
-float wcell = MAXX/wcellAmout, hcell = MAXY/hcellAmout;
+GameManager ga = GameManager();
 
-void LoadModel(Model &model, char* name);
+void LoadModel(Model &model, const char* name);
 void DrawModel(const Model &model);
 void DrawTriangle(const Triangle &triangle);
 void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void UnitVector(Vector3 &vect);
-void DrawWalls();
 
-void DrawWalls()
-{
-    int line, column;
-    glColor3f(1,0,0);
-    glLineWidth(3);
-    for(line=0; line<MAXY; line+=hcell)
-    {
-        for(column=0; column<MAXX; column+=wcell)
-        {
-            glBegin(GL_LINES);
-            {
-                glVertex3f(column,line,0);
-                glVertex3f(column,line+hcell,0);
-                glVertex3f(column,line+hcell,0);
-                glVertex3f(-column-wcell,line+hcell,0);
-                glVertex3f(-column-wcell,line+hcell,0);
-                glVertex3f(-column-wcell,line,0);
-                glVertex3f(-column-wcell,line,0);
-                glVertex3f(column,line,0);
-            }
-            glEnd();
-        }
-    }
-
-}
 
 void UnitVector(Vector3 &vect)
 {
@@ -124,7 +97,7 @@ void SetColor(string hex, ColorRGB &colorRGB)
     colorRGB.b = ((float) strtol(color, 0, 16))/255.0f;
 }
 
-void LoadModel(Model &model, char* name)
+void LoadModel(Model &model, const char* name)
 {
     ifstream file;
     file.open(name);
@@ -167,7 +140,7 @@ void DrawModel(const Model &model)
 {
     glPushMatrix();
     {
-        glTranslated(0,0,15);
+        glTranslated(0,0,5);
         glRotatef(AngY,0,1,0);
         for(unsigned int triangle = 0; triangle < model.modelSize; triangle++)
         {
@@ -191,6 +164,94 @@ void DrawTriangle(const Triangle &triangle)
     }
     glEnd();
 }
+// **********************************************************************
+//  void GameManager::LoadScenario(string fileName)
+//  Carrega os modelos e objetos que estaram no cenario
+// **********************************************************************
+void GameManager::LoadScenario(char* fileName)
+{
+    ifstream file(fileName);
+    int cont = 0;
+    const char* nameModel;
+    string temp;
+    int pixel;
+    int currentObj;
+
+    if(file == NULL)
+    {
+        cout << "Arquivo " << fileName << " não encontrado.\n";
+        return;
+    }
+
+    //le quantidade de modelos
+    file >> modelsCont;
+    models = new Model[modelsCont];
+    //le os modelos
+    while(cont < modelsCont)
+    {
+        file >> temp;
+        nameModel = temp.c_str();
+        LoadModel(models[cont], nameModel);
+        cont++;
+    }
+    //Le dimensoes do cenario
+    file >> sizeCell;
+    //Le quantidade de objetos
+    file >> objectsCont;
+    //Le dimensoes da matriz
+    file >> MAXX;
+    file >> MAXY;
+    //Cria os objetos
+    objects = new Object[objectsCont];
+    currentObj = 0;
+    int x,y;
+    for(y=0; y<MAXY; y++)
+    {
+        for(x=0; x<MAXX; x++)
+        {
+            file >> pixel;
+            if(pixel != 0)
+            {
+                objects[currentObj].SetObject(Vector3(x*sizeCell, y*sizeCell, 0), &(models[pixel-1]), 0);
+                currentObj++;
+            }
+        }
+    }
+
+    file.close();
+}
+// **********************************************************************
+//  void GameManager::DrawScenario()
+//  Desenha todos os objetos do cenario
+// **********************************************************************
+void GameManager::DrawScenario()
+{
+    for(int i=0; i<objectsCont; i++)
+    {
+        objects[i].Render();
+    }
+}
+// **********************************************************************
+//  void Object::Render()
+//  Desenha o modelo do objeto
+// **********************************************************************
+void Object::Render()
+{
+    glPushMatrix();
+    {
+        glTranslated(position.x,position.y,position.z);
+        glRotatef(angle,0,1,0);
+        for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
+        {
+            glColor3f(model->triangles[triangle].color.r,
+                      model->triangles[triangle].color.g,
+                      model->triangles[triangle].color.b);
+            DrawTriangle(model->triangles[triangle]);
+        }
+    }
+    glPopMatrix();
+}
+
 // **********************************************************************
 //  void DefineLuz(void)
 //
@@ -355,31 +416,12 @@ void display( void )
 {
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
 	DefineLuz();
-
 	PosicUser();
-
 	glMatrixMode(GL_MODELVIEW);
-/*
-	glPushMatrix();
-		glTranslatef ( 1.0f, 0.0f, -5.0f );
-        glRotatef(AngY,0,1,0);
-		glColor3f(0.5f,0.0f,0.0f); // Vermelho
-		DesenhaCubo();
-	glPopMatrix();
-*/
-    //DrawModel(model);
-    glTranslatef(0,0,5);
-    DrawWalls();
-/*
-	glPushMatrix();
-		glTranslatef ( -1.0f, 2.0f, -8.0f );
-		glRotatef(AngY,0,1,0);
-		glColor3f(0.0f,0.6f,0.0f); // Verde
-		DesenhaCubo();
-	glPopMatrix();
-*/
+
+    ga.DrawScenario();
+
 	glutSwapBuffers();
 }
 
@@ -432,9 +474,12 @@ void keyboard ( unsigned char key, int x, int y )
 {
 	switch ( key )
 	{
-    case 27:        // Termina o programa qdo
-      exit ( 0 );   // a tecla ESC for pressionada
-      break;
+        case 27:        // Termina o programa qdo
+          exit ( 0 );   // a tecla ESC for pressionada
+          break;
+
+        case 'w':
+          break;
 
     default:
             cout << key;
@@ -473,8 +518,7 @@ void arrow_keys ( int a_keys, int x, int y )
 // **********************************************************************
 int main ( int argc, char** argv )
 {
-    char name[] = "moto_2.tri";
-    LoadModel(model, name);
+    ga.LoadScenario("cenario1.txt");
 
 	glutInit            ( &argc, argv );
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
@@ -483,7 +527,6 @@ int main ( int argc, char** argv )
 	glutCreateWindow    ( "Computacao Grafica - Exemplo Basico 3D" );
 
 	init ();
-    //system("pwd");
 
 	glutDisplayFunc ( display );
 	glutReshapeFunc ( reshape );

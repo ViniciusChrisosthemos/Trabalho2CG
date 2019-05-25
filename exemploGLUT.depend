@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1558309155 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1558826955 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -273,6 +273,7 @@
 	<Camera.h>
 	<Triangle.h>
 	<Model.h>
+	<GameManager.h>
 	<windows.h>
 	"gl\glut.h"
 	<sys/time.h>
@@ -292,25 +293,29 @@
 
 1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut_ext.h
 
-1558295172 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
+1558397025 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 
-1558298789 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
+1558397025 c:\users\vinic\desktop\git\trabalho2cg\include\vector3.h
 
-1558305073 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
+1558826186 source:c:\users\vinic\desktop\git\trabalho2cg\src\object.cpp
 	"Object.h"
 	<Triangle.h>
 	<Vector3.h>
+	<Model.h>
+	<stdio.h>
 
-1558304844 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
+1558826042 c:\users\vinic\desktop\git\trabalho2cg\include\object.h
 	<Triangle.h>
 	<Vector3.h>
+	<Model.h>
 
-1558306755 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
+1558397025 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
 	"Triangle.h"
 	<Vector3.h>
+	<ColorRGB.h>
 
-1558308867 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
+1558397025 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
 	<Vector3.h>
 	<ColorRGB.h>
 
@@ -326,9 +331,9 @@
 1558306726 c:\users\vinic\desktop\git\trabalho2cg\include\model.h
 	<Triangle.h>
 
-1558309588 c:\users\vinic\desktop\git\trabalho2cg\include\colorrgb.h
+1558397025 c:\users\vinic\desktop\git\trabalho2cg\include\colorrgb.h
 
-1558309305 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
+1558397025 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
 1558527969 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
@@ -398,4 +403,12 @@
 	"Triangle.h"
 	<Vector3.h>
 	<ColorRGB.h>
+
+1558820201 source:c:\users\vinic\desktop\git\trabalho2cg\src\gamemanager.cpp
+	"GameManager.h"
+
+1558825679 c:\users\vinic\desktop\git\trabalho2cg\include\gamemanager.h
+	<Model.h>
+	<Object.h>
+	<string>
 

@@ -1,0 +1,20 @@
+2
+casa.tri
+tree.tri
+10
+6
+4 4
+2 0 2 2
+0 1 0 0
+2 0 2 0
+0 0 0 0
+
+--> Configuração do arquivo
+<Numero de modelos>
+<Nome do arquivo do modelo 1>
+< ... >
+<Nome do arquivo do modelo N>
+<Tamanho de uma celula do cenario>
+<Quantidade de objetos no cenario>
+<Dimencoes da matriz>
+<Matriz caracterizando um cenario>
