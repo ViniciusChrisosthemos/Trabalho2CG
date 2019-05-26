@@ -17,6 +17,7 @@
 #include <Triangle.h>
 #include <Model.h>
 #include <GameManager.h>
+#include <Player.h>
 
 using namespace std;
 
@@ -36,6 +37,8 @@ using namespace std;
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,0,-5), new Vector3(0,0,15));
 GameManager ga = GameManager();
+Player player = Player(10);
+float deltaTime = 0;
 
 void LoadModel(Model &model, const char* name);
 void DrawModel(const Model &model);
@@ -44,7 +47,25 @@ void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void UnitVector(Vector3 &vect);
+void MovePlayer();
 
+void MovePlayer()
+{
+    if(GetKeyState('W') & 0x8000)
+    {
+        player.Move(deltaTime);
+    }
+
+    if(GetKeyState('A') & 0x8000)
+    {
+        player.Rotate(deltaTime);
+    }
+
+    if(GetKeyState('D') & 0x8000)
+    {
+        player.Rotate(-deltaTime);
+    }
+}
 
 void UnitVector(Vector3 &vect)
 {
@@ -200,19 +221,19 @@ void GameManager::LoadScenario(char* fileName)
     file >> objectsCont;
     //Le dimensoes da matriz
     file >> MAXX;
-    file >> MAXY;
+    file >> MAXZ;
     //Cria os objetos
     objects = new Object[objectsCont];
     currentObj = 0;
-    int x,y;
-    for(y=0; y<MAXY; y++)
+    int x,z;
+    for(z=0; z<MAXZ; z++)
     {
         for(x=0; x<MAXX; x++)
         {
             file >> pixel;
             if(pixel != 0)
             {
-                objects[currentObj].SetObject(Vector3(x*sizeCell, y*sizeCell, 0), &(models[pixel-1]), 0);
+                objects[currentObj].SetObject(Vector3(x*sizeCell, 0, z*sizeCell), &(models[pixel-1]), 0);
                 currentObj++;
             }
         }
@@ -421,6 +442,7 @@ void display( void )
 	glMatrixMode(GL_MODELVIEW);
 
     ga.DrawScenario();
+    MovePlayer();
 
 	glutSwapBuffers();
 }
@@ -447,6 +469,7 @@ void animate()
     1.0e-6*(time_now.tv_usec - last_idle_time.tv_usec);
 #endif
     AccumTime +=dt;
+    deltaTime = dt;
     if (AccumTime >=3) // imprime o FPS a cada 3 segundos
     {
         cout << 1.0/dt << " FPS"<< endl;
@@ -477,10 +500,6 @@ void keyboard ( unsigned char key, int x, int y )
         case 27:        // Termina o programa qdo
           exit ( 0 );   // a tecla ESC for pressionada
           break;
-
-        case 'w':
-          break;
-
     default:
             cout << key;
       break;
@@ -519,6 +538,9 @@ void arrow_keys ( int a_keys, int x, int y )
 int main ( int argc, char** argv )
 {
     ga.LoadScenario("cenario1.txt");
+
+    mainCamera->SetObserver(&(player.position), player.angle);
+    mainCamera->SetObserver(&(player.position), player.angle);
 
 	glutInit            ( &argc, argv );
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );

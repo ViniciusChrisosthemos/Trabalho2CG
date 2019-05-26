@@ -7,7 +7,7 @@ Camera::Camera(Vector3* observer, Vector3* target)
     angle = 0;
 }
 
-void Camera::SetObserver(Vector3* observer)
+void Camera::SetObserver(Vector3* observer, float angle)
 {
     this->observer = observer;
 }
