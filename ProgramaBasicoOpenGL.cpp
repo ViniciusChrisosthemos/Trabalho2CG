@@ -48,6 +48,14 @@ void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void UnitVector(Vector3 &vect);
 void MovePlayer();
+void DrawGUI();
+void Draw();
+void Process();
+
+void DrawGUI()
+{
+    //TODO
+}
 
 void MovePlayer()
 {
@@ -66,7 +74,12 @@ void MovePlayer()
         player.Rotate(-deltaTime);
     }
 
-    cout << player.position.x << " " << player.position.y << " " << player.position.z << " " << player.angle <<"\n";
+    if(player.position.x > ga.MAXX) player.position.x = ga.MAXX;
+    else if(player.position.x < 0) player.position.x = 0;
+    if(player.position.y > ga.MAXY) player.position.y = ga.MAXY;
+    else if(player.position.y < 0) player.position.y = 0;
+    if(player.position.z > ga.MAXZ) player.position.z = ga.MAXZ;
+    else if(player.position.z < 0) player.position.z = 0;
 }
 
 void UnitVector(Vector3 &vect)
@@ -240,6 +253,10 @@ void GameManager::LoadScenario(char* fileName)
             }
         }
     }
+    ga.sizeCell = sizeCell;
+    ga.MAXX = MAXX * sizeCell;
+    ga.MAXY = 1;
+    ga.MAXZ = MAXZ * sizeCell;
 
     file.close();
 }
@@ -452,7 +469,7 @@ void display( void )
 
     ga.DrawScenario();
     MovePlayer();
-
+    DrawGUI();
 	glutSwapBuffers();
 }
 
