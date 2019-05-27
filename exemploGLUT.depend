@@ -337,7 +337,7 @@
 1558397025 source:c:\users\vinic\desktop\git\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
-1558527969 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
+1558963326 source:c:\users\17204102\desktop\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -346,61 +346,66 @@
 	<Camera.h>
 	<Triangle.h>
 	<Model.h>
+	<GameManager.h>
+	<Player.h>
 	<windows.h>
 	"gl\glut.h"
 	<sys/time.h>
 	<GLUT/glut.h>
 
-1558360186 c:\users\17204102\desktop\trabalho2cg\include\vector3.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\vector3.h
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\camera.h
+1558962237 c:\users\17204102\desktop\trabalho2cg\include\camera.h
 	<Vector3.h>
 
-1558362200 c:\users\17204102\desktop\trabalho2cg\include\triangle.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\triangle.h
 	<Vector3.h>
 	<ColorRGB.h>
 
-1558361817 c:\users\17204102\desktop\trabalho2cg\include\colorrgb.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\colorrgb.h
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\model.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\model.h
 	<Triangle.h>
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\glut.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\gl\glut.h
 	"freeglut.h"
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut.h
 	"freeglut_std.h"
 	"freeglut_ext.h"
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_std.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_std.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_ext.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\gl\freeglut_ext.h
 
-1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\camera.cpp
+1558962259 source:c:\users\17204102\desktop\trabalho2cg\src\camera.cpp
 	"Camera.h"
 
-1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\object.cpp
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\object.cpp
 	"Object.h"
 	<Triangle.h>
 	<Vector3.h>
+	<Model.h>
+	<stdio.h>
 
-1558356643 c:\users\17204102\desktop\trabalho2cg\include\object.h
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\object.h
 	<Triangle.h>
 	<Vector3.h>
+	<Model.h>
 
-1558360223 source:c:\users\17204102\desktop\trabalho2cg\src\vector3.cpp
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 
-1558361873 source:c:\users\17204102\desktop\trabalho2cg\src\colorrgb.cpp
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\colorrgb.cpp
 	"ColorRGB.h"
 
-1558356643 source:c:\users\17204102\desktop\trabalho2cg\src\model.cpp
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\model.cpp
 	"Model.h"
 
-1558362237 source:c:\users\17204102\desktop\trabalho2cg\src\triangle.cpp
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\triangle.cpp
 	"Triangle.h"
 	<Vector3.h>
 	<ColorRGB.h>
@@ -419,4 +424,20 @@
 
 1558827847 c:\users\vinic\desktop\git\trabalho2cg\include\player.h
 	<Object.h>
+
+1558960822 c:\users\17204102\desktop\trabalho2cg\include\gamemanager.h
+	<Model.h>
+	<Object.h>
+	<string>
+
+1558961578 c:\users\17204102\desktop\trabalho2cg\include\player.h
+	<Object.h>
+	<Vector3.h>
+
+1558960822 source:c:\users\17204102\desktop\trabalho2cg\src\gamemanager.cpp
+	"GameManager.h"
+
+1558962323 source:c:\users\17204102\desktop\trabalho2cg\src\player.cpp
+	"Player.h"
+	<math.h>
 

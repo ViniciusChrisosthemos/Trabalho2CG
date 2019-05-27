@@ -65,6 +65,8 @@ void MovePlayer()
     {
         player.Rotate(-deltaTime);
     }
+
+    cout << player.position.x << " " << player.position.y << " " << player.position.z << " " << player.angle <<"\n";
 }
 
 void UnitVector(Vector3 &vect)
@@ -352,8 +354,15 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glRotatef(mainCamera->angle, 0,1,0);
-	    gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
+	/*
+	    glRotatef(-player.angle, 0,1,0);
+	    gluLookAt(player.position.x, player.position.y, player.position.z,
+                  player.position.x, player.position.y, player.position.z + 10,
+                  0.0f,1.0f,0.0f);
+    */
+
+	glRotatef(*(mainCamera->angle)*-1, 0,1,0);
+	    gluLookAt(mainCamera->observer->x, mainCamera->observer->y+1, mainCamera->observer->z,
                   mainCamera->target->x,mainCamera->target->y,mainCamera->target->z,
                   0.0f,1.0f,0.0f);
 
@@ -539,8 +548,8 @@ int main ( int argc, char** argv )
 {
     ga.LoadScenario("cenario1.txt");
 
-    mainCamera->SetObserver(&(player.position), player.angle);
-    mainCamera->SetObserver(&(player.position), player.angle);
+    mainCamera->SetObserver(&(player.position), &(player.angle));
+    mainCamera->SetTarget(player.target);
 
 	glutInit            ( &argc, argv );
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );

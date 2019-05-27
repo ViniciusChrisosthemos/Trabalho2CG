@@ -7,10 +7,10 @@ class Camera
     public:
         Vector3* observer;
         Vector3* target;
-        float angle;
+        float* angle;
 
         Camera(Vector3* observer, Vector3* target);
-        void SetObserver(Vector3* observer, float angle);
+        void SetObserver(Vector3* observer, float* angle);
         void SetTarget(Vector3* target);
         virtual ~Camera();
 
