@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1558829069 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1559001345 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -320,10 +320,10 @@
 	<Vector3.h>
 	<ColorRGB.h>
 
-1558828283 source:c:\users\vinic\desktop\git\trabalho2cg\src\camera.cpp
+1559001345 source:c:\users\vinic\desktop\git\trabalho2cg\src\camera.cpp
 	"Camera.h"
 
-1558828220 c:\users\vinic\desktop\git\trabalho2cg\include\camera.h
+1559001345 c:\users\vinic\desktop\git\trabalho2cg\include\camera.h
 	<Vector3.h>
 
 1558306707 source:c:\users\vinic\desktop\git\trabalho2cg\src\model.cpp
@@ -418,12 +418,13 @@
 	<Object.h>
 	<string>
 
-1558828663 source:c:\users\vinic\desktop\git\trabalho2cg\src\player.cpp
+1559001345 source:c:\users\vinic\desktop\git\trabalho2cg\src\player.cpp
 	"Player.h"
 	<math.h>
 
-1558827847 c:\users\vinic\desktop\git\trabalho2cg\include\player.h
+1559001345 c:\users\vinic\desktop\git\trabalho2cg\include\player.h
 	<Object.h>
+	<Vector3.h>
 
 1558960822 c:\users\17204102\desktop\trabalho2cg\include\gamemanager.h
 	<Model.h>
