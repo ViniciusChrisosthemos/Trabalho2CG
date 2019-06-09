@@ -6,6 +6,8 @@ class Model
 {
     public:
         Triangle* triangles;
+        float width;
+        float height;
         unsigned int modelSize;
 
         Model();

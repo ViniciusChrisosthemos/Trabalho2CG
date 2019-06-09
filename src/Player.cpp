@@ -7,18 +7,17 @@ Player::Player(int speed)
     battery = 100.0f;
     batteryCost = 5.0f;
     this->speed = speed;
-    target = new Vector3(0,0,10);
+    target = new Vector3(0,1,10);
 }
 
-void Player::Move(float deltaTime)
+Vector3 Player::Move(float deltaTime)
 {
     float alfa = speed * deltaTime;
     float angleRad = RADTODEG*angle;
-    position.x += sin(angleRad) * alfa;
-    position.z += cos(angleRad) * alfa;
+    float x = position.x + sin(angleRad) * alfa;
+    float z = position.z + cos(angleRad) * alfa;
 
-    target->x = position.x;
-    target->z = position.z + 10;
+    return Vector3(x, position.y, z);
 }
 
 void Player::Rotate(float deltaTime)
