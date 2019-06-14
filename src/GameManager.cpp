@@ -18,6 +18,5 @@ GameManager::~GameManager()
     delete enemyModel;
     delete enemys;
     delete objects;
-    delete bullets;
     delete bulletModel;
 }

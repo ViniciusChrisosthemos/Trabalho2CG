@@ -10,14 +10,15 @@ Player::Player(int speed)
     target = new Vector3(0,1,10);
 }
 
-Vector3 Player::Move(float deltaTime)
+void Player::Move(float deltaTime)
 {
     float alfa = speed * deltaTime;
     float angleRad = RADTODEG*angle;
-    float x = position.x + sin(angleRad) * alfa;
-    float z = position.z + cos(angleRad) * alfa;
+    position.x += sin(angleRad) * alfa;
+    position.z += cos(angleRad) * alfa;
 
-    return Vector3(x, position.y, z);
+    target->x += sin(angleRad) * alfa;
+    target->z += cos(angleRad) * alfa;
 }
 
 void Player::Rotate(float deltaTime)

@@ -27,10 +27,11 @@ EnemyShip::~EnemyShip()
 // void EnemyShip::SetEnemyShip(Model* model, Vector3* target)
 // Define os atributos de uma nave inimiga
 // **********************************************************************
-void EnemyShip::SetEnemyShip(Model* model, Vector3* target)
+void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
 {
         this->target = target;
         this->model = model;
+        this->bulletModel = bulletModel;
         position = Vector3(0,5,0);
         p0 = Vector3(0,5,0);
         p1 = Vector3(20,5,0);
@@ -42,6 +43,9 @@ void EnemyShip::SetEnemyShip(Model* model, Vector3* target)
         nextShoot = currentTime + fireRate;
         t = 0;
         speed = rand()%3 + 3;
+
+        MAXBULLETS = 3;
+        bullets = new Bullet[MAXBULLETS];
 }
 // **********************************************************************
 // void MoveEShip()
@@ -107,4 +111,34 @@ bool EnemyShip::CanShoot()
         return true;
     }
     return false;
+}
+
+void EnemyShip::Shoot(float deltaTime)
+{
+    for(int i=0; i<MAXBULLETS; i++)
+    {
+        if(!bullets[i].inGame)
+        {
+            bullets[i].SetBullet(angle, position, *target, *bulletModel, 3.0f, deltaTime);
+            break;
+        }
+    }
+}
+
+void EnemyShip::Update(float deltaTime)
+{
+    MoveEShip(deltaTime);
+
+    if(CanShoot())
+    {
+        Shoot(deltaTime);
+    }
+
+    for(int i=0; i<MAXBULLETS; i++)
+    {
+        if(bullets[i].inGame)
+        {
+            bullets[i].Update(deltaTime);
+        }
+    }
 }

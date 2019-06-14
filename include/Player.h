@@ -13,7 +13,7 @@ class Player : public Object
         Vector3* target;
 
         Player(int speed);
-        Vector3 Move(float deltaTime);
+        void Move(float deltaTime);
         void Rotate(float deltaTime);
         virtual ~Player();
 

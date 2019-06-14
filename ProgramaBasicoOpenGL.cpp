@@ -35,7 +35,7 @@ using namespace std;
 #endif
 
 GLfloat AspectRatio, AngY=0;
-Camera* mainCamera = new Camera(new Vector3(0,0,-5), new Vector3(0,0,15));
+Camera* mainCamera = new Camera(new Vector3(0,2,0), new Vector3(0,2,1));
 GameManager ga = GameManager();
 Player player = Player(10);
 float deltaTime = 0;
@@ -65,34 +65,19 @@ bool IsColliding(Object &obj1, Object &obj2)
 
 void Process()
 {
-    int i;
+    int i, j;
 
     MovePlayer();
-/*
+
     for(i=0; i<ga.enemysCont; i++)
     {
-        ga.enemys[i].MoveEShip(deltaTime);
-        if(ga.enemys[i].CanShoot())
-        {
-            ga.bullets[ga.bulletsCont].SetBullet(ga.enemys[i].angle, ga.enemys[i].position, *(ga.enemys[i].target), ga.bulletModel[0], deltaTime);
-            ga.bulletsCont++;
-        }
-    }
+        ga.enemys[i].Update(deltaTime);
 
-    for(i=0; i<ga.bulletsCont; i++)
-    {
-        ga.bullets[i].Update(deltaTime);
-    }
-*/
-
-    for(i=0; i</*ga.spawnersCont*/1; i++)
-    {
-        ga.energySpawners[i].Update();
-        if(ga.energySpawners[i].active)
+        for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
         {
-            if(IsColliding(player, ga.energySpawners[i]))
+            if(IsColliding(player, ga.enemys[i]))
             {
-                ga.energySpawners[i].active = false;
+                cout << "AQUI!!!!\n";
             }
         }
     }
@@ -107,27 +92,35 @@ void MovePlayer()
 {
     if(GetKeyState('W') & 0x8000)
     {
-        Vector3 newPosition = player.Move(deltaTime);
+        //player.Move(deltaTime);
+        float alfa = 10 * deltaTime;
+        float angleRad = 0.01745329251*player.angle;
+        mainCamera->observer->x += sin(angleRad) * alfa;
+        mainCamera->observer->z += cos(angleRad) * alfa;
 
+        mainCamera->target->x += sin(angleRad) * alfa;
+        mainCamera->target->z += cos(angleRad) * alfa;
+
+        player.position.x += sin(angleRad) * alfa;
+        player.position.z += cos(angleRad) * alfa;
+        /*
         int x = newPosition.x / ga.sizeCell;
         int z = newPosition.z / ga.sizeCell;
 
-        if(x > ga.MAXXMATRIX) newPosition.x = ga.MAXXMATRIX * ga.sizeCell;
+        if(x > ga.MAXXMATRIX) newPosition.x = ga.MAXX;
         else if(x < 0) newPosition.x = 0;
-        if(z > ga.MAXZMATRIX) newPosition.z = ga.MAXZMATRIX * ga.sizeCell;
+        if(z > ga.MAXZMATRIX) newPosition.z = ga.MAXZ;
         else if(z < 0)
         {
             newPosition.z = 0;
         }else
         {
-            if((ga.matrixConstraints[z%ga.MAXZMATRIX][x%ga.MAXXMATRIX] == 0) | (ga.matrixConstraints[z%ga.MAXZMATRIX][x%ga.MAXXMATRIX] == -2))
-            {
-                player.position = newPosition;
-                player.target->x = newPosition.x;
-                player.target->z = newPosition.z + 2;
-            }
-        }
+            player.position = newPosition;
+            player.target->x = newPosition.x;
+            player.target->z = newPosition.z;
 
+        }
+        */
     }
 
     if(GetKeyState('A') & 0x8000)
@@ -302,6 +295,7 @@ void GameManager::LoadScenario(char* fileName)
     file >> objectsCont;
     //Le dimensoes da matriz
     file >> MAXXMATRIX;
+    file >> MAXY;
     file >> MAXZMATRIX;
     //Le dimensoes do cenario
     file >> sizeCell;
@@ -330,7 +324,8 @@ void GameManager::LoadScenario(char* fileName)
         }
     }
     ga.sizeCell = sizeCell;
-
+    ga.MAXX = ga.MAXXMATRIX * sizeCell;
+    ga.MAXZ = ga.MAXZMATRIX * sizeCell;
     file.close();
 }
 // **********************************************************************
@@ -339,31 +334,31 @@ void GameManager::LoadScenario(char* fileName)
 // **********************************************************************
 void GameManager::DrawScenario()
 {
-    int i;
+    int i, j;
 /*
     for(i=0; i<objectsCont; i++)
     {
         objects[i].Render();
     }
-*/
-    for(i=0; i</*spawnersCont*/1; i++)
+
+    for(i=0; i<spawnersCont; i++)
     {
         if(energySpawners[i].active)
         {
             energySpawners[i].Render();
         }
     }
-/*
+*/
     for(i=0; i<enemysCont; i++)
     {
         ga.enemys[i].Render();
+
+        for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
+        {
+            if(ga.enemys[i].bullets[j].inGame) ga.enemys[i].bullets[j].Render();
+        }
     }
 
-    for(i=0; i<bulletsCont; i++)
-    {
-        ga.bullets[i].Render();
-    }
-*/
     player.Render();
 }
 // **********************************************************************
@@ -462,12 +457,9 @@ void init(void)
 
     ga.LoadScenario("map.txt");
 
-    ga.MAXBULLETS = 100;
-    ga.bulletsCont = 0;
     ga.bulletModel = new Model[1];
     LoadModel(ga.bulletModel[0], "bullet.tri");
     ga.bulletModel[0].SetScale(0.1f);
-    ga.bullets = new Bullet[ga.MAXBULLETS];
 
     player.SetPosition(0,1,0);
     player.model = new Model[1];
@@ -481,7 +473,7 @@ void init(void)
     ga.enemyModel[0].SetScale(0.1f);
     for(int i=0; i<ga.enemysCont; i++)
     {
-        ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position));
+        ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position), &(ga.bulletModel[0]));
     }
 }
 // **********************************************************************
@@ -505,8 +497,8 @@ void PosicUser()
                   0.0f,1.0f,0.0f);
     */
     glRotatef(player.angle*-1, 0,1,0);
-    gluLookAt(player.position.x, player.position.y+1, player.position.z,
-              player.target->x, player.target->y+1, player.target->z,
+    gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
+              mainCamera->target->x, mainCamera->target->y, mainCamera->target->z,
                   0.0f,1.0f,0.0f);
 }
 // **********************************************************************

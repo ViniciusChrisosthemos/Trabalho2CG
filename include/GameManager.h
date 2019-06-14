@@ -17,16 +17,16 @@ class GameManager
         Object* objects;
         EnergySpawner* energySpawners;
         EnemyShip* enemys;
-        Bullet* bullets;
         char** matrixConstraints;
         int modelsCont;
         int objectsCont;
         int spawnersCont;
         int enemysCont;
-        int bulletsCont;
         int MAXXMATRIX;
         int MAXZMATRIX;
-        int MAXBULLETS;
+        int MAXX;
+        int MAXY;
+        int MAXZ;
         int sizeCell;
 
         GameManager();

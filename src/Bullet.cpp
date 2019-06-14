@@ -2,16 +2,22 @@
 #include <math.h>
 #include <Model.h>
 #include <stdio.h>
+#include <stdlib.h>
 #define RADTODEG 0.01745329251
 
-Bullet::Bullet(){}
+Bullet::Bullet()
+{
+    inGame = false;
+}
 
 void Bullet::Update(float deltaTime)
 {
-    position = position.Sum(alfa.Produt(speed * deltaTime));
+    time(&currentTime);
+    if(currentTime > lifeTime) inGame = false;
+    else position = position.Sum(alfa.Produt(speed * deltaTime));
 }
 
-void Bullet::SetBullet(float angle, Vector3 position, Vector3 target, Model &model, float deltaTime)
+void Bullet::SetBullet(float &angle, Vector3 &position, Vector3 &target, Model &model, float lifeTime, float &deltaTime)
 {
     this->model = &model;
     this->position = position;
@@ -20,6 +26,12 @@ void Bullet::SetBullet(float angle, Vector3 position, Vector3 target, Model &mod
 
     alfa = Vector3(target.x - position.x, target.y - position.y, target.z - position.z);
     alfa = alfa.UnitVector();
+
+    time(NULL);
+    time(&currentTime);
+    this->lifeTime = currentTime + lifeTime;
+
+    inGame = true;
 }
 
 Bullet::~Bullet()
