@@ -15,6 +15,8 @@ class Player : public Object
         Player(int speed);
         Vector3 Move(float deltaTime);
         void Rotate(float deltaTime);
+        void Charge(int charge);
+        void TakeDamage(int damage);
         virtual ~Player();
 
     protected:

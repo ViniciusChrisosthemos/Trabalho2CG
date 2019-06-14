@@ -25,6 +25,18 @@ void Player::Rotate(float deltaTime)
     angle += deltaTime * 100;
 }
 
+void Player::Charge(int charge)
+{
+    battery += charge;
+    battery = (battery > 100) ? 100:battery;
+}
+
+void Player::TakeDamage(int damage)
+{
+    battery -= damage;
+    if(battery <= 0) inGame = false;
+}
+
 Player::~Player()
 {
     //dtor

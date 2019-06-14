@@ -28,6 +28,8 @@ class GameManager
         int XMATRIX;
         int ZMATRIX;
         int sizeCell;
+        int WIDTHSCREEN = 50;
+        int HEIGHTSCREEN = 200;
 
         GameManager();
         void LoadScenario(char* fileName);

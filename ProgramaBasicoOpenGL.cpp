@@ -34,10 +34,12 @@ using namespace std;
 #include <GLUT/glut.h>
 #endif
 
+enum STATUS{GAMEOVER,INGAME};
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,2,0), new Vector3(0,2,1));
 GameManager ga = GameManager();
 Player player = Player(10);
+STATUS status = INGAME;
 float deltaTime = 0;
 
 bool IsColliding(Object &obj1, Object &obj2);
@@ -51,6 +53,12 @@ void MovePlayer();
 void DrawGUI();
 void Draw();
 void Process();
+void GameOver();
+
+void GameOver()
+{
+
+}
 
 bool IsColliding(Object &obj1, Object &obj2)
 {
@@ -65,54 +73,70 @@ bool IsColliding(Object &obj1, Object &obj2)
 
 void Process()
 {
-    int i, j, k;
-
-    MovePlayer();
-
-    // Processa dados das naves inimigas
-    for(i=0; i<ga.enemysCont; i++)
+    if(player.inGame)
     {
-        ga.enemys[i].Update(deltaTime);
-        // Verifica se o trajeto da bezie já terminou para gerar outro
-        if(ga.enemys[i].BezieCompleted()) ga.enemys[i].SetNewBezie(ga.MAXX, ga.MAXY, ga.MAXZ);
-        // Processa dados dos disparos ativos
-        for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
+        int i, j, k;
+
+        MovePlayer();
+
+        // Processa dados das naves inimigas
+        for(i=0; i<ga.enemysCont; i++)
         {
-            if(ga.enemys[i].bullets[j].inGame)
+            ga.enemys[i].Update(deltaTime);
+            // Verifica se o trajeto da bezie já terminou para gerar outro
+            if(ga.enemys[i].BezieCompleted()) ga.enemys[i].SetNewBezie(ga.MAXX, ga.MAXY, ga.MAXZ);
+            // Processa dados dos disparos ativos
+            for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
             {
-                // Colisão com o jogador
-                if(IsColliding(player, ga.enemys[i].bullets[j]))
+                if(ga.enemys[i].bullets[j].inGame)
                 {
-                    ga.enemys[i].bullets[j].inGame = false;
-                    player.battery -= ga.enemys[i].bullets[j].damage;
-                }
-                //Colisão com objetos no cenário
-                for(k=0; k<ga.objectsCont; k++)
-                {
-                    if(IsColliding(ga.objects[k], ga.enemys[i].bullets[j])) ga.enemys[i].bullets[j].inGame = false;
+                    // Colisão com o jogador
+                    if(IsColliding(player, ga.enemys[i].bullets[j]))
+                    {
+                        ga.enemys[i].bullets[j].inGame = false;
+                        player.TakeDamage(ga.enemys[i].bullets[j].damage);
+                    }
+                    //Colisão com objetos no cenário
+                    for(k=0; k<ga.objectsCont; k++)
+                    {
+                        if(IsColliding(ga.objects[k], ga.enemys[i].bullets[j])) ga.enemys[i].bullets[j].inGame = false;
+                    }
                 }
             }
         }
-    }
-
-    // Verifica colisões com EnergySpawners e atualiza seus atributos
-    for(i=0; i<ga.spawnersCont; i++)
-    {
-        ga.energySpawners[i].Update();
-        if(ga.energySpawners[i].inGame)
+        // Verifica colisões com EnergySpawners e atualiza seus atributos
+        for(i=0; i<ga.spawnersCont; i++)
         {
-            if(IsColliding(player, ga.energySpawners[i]))
+            ga.energySpawners[i].Update();
+            if(ga.energySpawners[i].inGame)
             {
-                ga.energySpawners[i].inGame = false;
-                player.battery += ga.energySpawners[i].energyCharge;
+                if(IsColliding(player, ga.energySpawners[i]))
+                {
+                    ga.energySpawners[i].inGame = false;
+                    player.Charge(ga.energySpawners[i].energyCharge);
+                }
             }
         }
+    }else
+    {
+        status = GAMEOVER;
     }
 }
 
 void DrawGUI()
 {
-    //TODO
+    int x = -8;
+    int y = ga.HEIGHTSCREEN - 110;
+    int width = 1;
+    glColor3f(1,0,0);
+    glBegin(GL_QUADS);
+    {
+        glVertex2d(x,y);
+        glVertex2d(x+width,y);
+        glVertex2d(x+width,y+player.battery);
+        glVertex2d(x,y+player.battery);
+    }
+    glEnd();
 }
 
 void MovePlayer()
@@ -160,8 +184,6 @@ void MovePlayer()
             player.target->x += alfa.x;
             player.target->z += alfa.z;
         }
-
-        cout << player.position.x << " " << player.position.z << "\n";
     }
 }
 
@@ -336,6 +358,7 @@ void GameManager::LoadScenario(char* fileName)
     currentObj = 0;
     int x,z;
     InitMatrix();
+
     for(z=0; z<ZMATRIX; z++)
     {
         for(x=0; x<XMATRIX; x++)
@@ -354,7 +377,6 @@ void GameManager::LoadScenario(char* fileName)
             }
         }
     }
-    cout << "-->>" << ga.MAXX << " " << ga.MAXZ << "\n";
     file.close();
 }
 // **********************************************************************
@@ -475,7 +497,7 @@ void init(void)
 	glShadeModel(GL_SMOOTH);
 	glColorMaterial ( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
 	glEnable(GL_DEPTH_TEST);
-	//glEnable ( GL_CULL_FACE );
+	glEnable ( GL_CULL_FACE );
 
     // Obtem o tempo inicial
 #ifdef WIN32
@@ -497,7 +519,7 @@ void init(void)
     player.model->SetScale(0.1f);
     cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
 
-    ga.enemysCont = 10;
+    ga.enemysCont = 0;
     ga.enemys = new EnemyShip[ga.enemysCont];
     ga.enemyModel = new Model[1];
     LoadModel(ga.enemyModel[0], "enemy.tri");
@@ -509,6 +531,8 @@ void init(void)
 
     mainCamera->SetObserver(&(player.position), player.angle);
     mainCamera->SetTarget(player.target);
+
+    cout << "1\n";
 }
 // **********************************************************************
 //  void PosicUser()
@@ -524,12 +548,6 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	/*
-	    glRotatef(-player.angle, 0,1,0);
-	    gluLookAt(player.position.x, player.position.y, player.position.z,
-                  player.position.x, player.position.y, player.position.z + 10,
-                  0.0f,1.0f,0.0f);
-    */
     glRotatef(player.angle*-1, 0,1,0);
     gluLookAt(mainCamera->observer->x, mainCamera->observer->y+1, mainCamera->observer->z,
               mainCamera->target->x, mainCamera->target->y+1, mainCamera->target->z,
@@ -542,7 +560,6 @@ void PosicUser()
 // **********************************************************************
 void reshape( int w, int h )
 {
-
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
 	if(h == 0)
@@ -612,14 +629,31 @@ void DesenhaCubo()
 void display( void )
 {
 
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	DefineLuz();
-	PosicUser();
-	glMatrixMode(GL_MODELVIEW);
+	if(status == INGAME)
+    {
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        DefineLuz();
+        PosicUser();
+        glMatrixMode(GL_MODELVIEW);
 
-	Process();
-    ga.DrawScenario();
-    DrawGUI();
+        Process();
+
+        ga.DrawScenario();
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glOrtho(0,ga.WIDTHSCREEN,0,ga.HEIGHTSCREEN,0,1);
+
+        DrawGUI();
+    }else
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glOrtho(0,ga.WIDTHSCREEN,0,ga.HEIGHTSCREEN,0,1);
+
+        GameOver();
+    }
 
 	glutSwapBuffers();
 }
@@ -721,14 +755,6 @@ int main ( int argc, char** argv )
 	glutCreateWindow    ( "Computacao Grafica - Exemplo Basico 3D" );
 
 	init ();
-	for(int i=0; i<ga.MAXZ; i++)
-    {
-        for(int j=0; j<ga.MAXX; j++)
-        {
-            cout << ga.matrix[i][j] << " ";
-        }
-        cout << "\n";
-    }
 
 	glutDisplayFunc ( display );
 	glutReshapeFunc ( reshape );

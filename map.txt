@@ -1,12 +1,26 @@
 2
-casa.tri 2
+wall.tri 0.001
 tree.tri 0.006
-6
+0
 dog.tri 0.2
-3
-5 10 5 10
-0 0 -1 0 0
-2 -1 0 -1 0
-0 2 0 2 0
-0 0 -1 0 0
--1 0 0 -1 0
+4
+10 10 10 1
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 1 1 1 1 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+
+# Parametros
+- Quantidade de modelos
+- Sequência dos nomes dos modelos com sua escala
+- Quantidade de caixas de combustivel
+- Modelo da caixa de combustivel com sua escala
+- Quantidade de objetos no mapa
+- Dimensões do mapa (x maximo, y máximo, z máximo, tamanho da célula)
+- Matriz caracterizando um cenário
