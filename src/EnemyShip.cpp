@@ -119,7 +119,7 @@ void EnemyShip::Shoot(float deltaTime)
     {
         if(!bullets[i].inGame)
         {
-            bullets[i].SetBullet(angle, position, *target, *bulletModel, 3.0f, deltaTime);
+            bullets[i].SetBullet(angle, position, *target, bulletModel, 3.0f, deltaTime);
             break;
         }
     }

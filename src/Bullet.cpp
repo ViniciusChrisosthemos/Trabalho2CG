@@ -17,9 +17,9 @@ void Bullet::Update(float deltaTime)
     else position = position.Sum(alfa.Produt(speed * deltaTime));
 }
 
-void Bullet::SetBullet(float &angle, Vector3 &position, Vector3 &target, Model &model, float lifeTime, float &deltaTime)
+void Bullet::SetBullet(float &angle, Vector3 &position, Vector3 &target, Model *model, float lifeTime, float &deltaTime)
 {
-    this->model = &model;
+    this->model = model;
     this->position = position;
     speed = 50.0f;
     damage = 10;

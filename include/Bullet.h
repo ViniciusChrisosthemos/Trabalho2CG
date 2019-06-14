@@ -16,7 +16,7 @@ class Bullet : public Object
 
         Bullet();
         void Update(float deltaTime);
-        void SetBullet(float &angle, Vector3 &position, Vector3 &target, Model &model, float lifeTime, float &deltaTime);
+        void SetBullet(float &angle, Vector3 &position, Vector3 &target, Model *model, float lifeTime, float &deltaTime);
         virtual ~Bullet();
 
     protected:

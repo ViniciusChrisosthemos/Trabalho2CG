@@ -59,7 +59,7 @@ bool IsColliding(Object &obj1, Object &obj2)
     if((obj2.position.y + obj2.model->height) < obj1.position.y - obj1.model->height) return false;
     if((obj2.position.y - obj2.model->height) > obj1.position.y + obj1.model->height) return false;
     if((obj2.position.z + obj2.model->depth) < obj1.position.z - obj1.model->depth) return false;
-    if((obj2.position.z - obj2.model->depth) > obj1.position.z - obj1.model->depth) return false;
+    if((obj2.position.z - obj2.model->depth) > obj1.position.z + obj1.model->depth) return false;
     return true;
 }
 
@@ -75,11 +75,15 @@ void Process()
 
         for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
         {
-            if(IsColliding(player, ga.enemys[i]))
+            if(ga.enemys[i].bullets[j].inGame)
             {
-                cout << "AQUI!!!!\n";
+                if(IsColliding(player, ga.enemys[i].bullets[j]))
+                {
+                    cout << "AQUI!!!!\n";
+                }
             }
         }
+
     }
 }
 
@@ -460,11 +464,13 @@ void init(void)
     ga.bulletModel = new Model[1];
     LoadModel(ga.bulletModel[0], "bullet.tri");
     ga.bulletModel[0].SetScale(0.1f);
+    cout << "Bullet -> " << ga.bulletModel[0].width << " " << ga.bulletModel[0].height << " " << ga.bulletModel[0].depth << "\n";
 
     player.SetPosition(0,1,0);
     player.model = new Model[1];
     LoadModel(player.model[0], "player.tri");
     player.model->SetScale(0.1f);
+    cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
 
     ga.enemysCont = 1;
     ga.enemys = new EnemyShip[ga.enemysCont];
