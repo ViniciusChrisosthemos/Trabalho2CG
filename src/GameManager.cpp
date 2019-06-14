@@ -11,7 +11,13 @@ GameManager::~GameManager()
         delete matrixConstraints[z];
     }
 
+    delete spawnerModel;
+    delete energySpawners;
     delete matrixConstraints;
     delete models;
+    delete enemyModel;
+    delete enemys;
     delete objects;
+    delete bullets;
+    delete bulletModel;
 }

@@ -55,7 +55,7 @@ void EnemyShip::MoveEShip(float deltaTime)
     position.y = pow(aux,3)*p0.y + 3*t*pow(aux,2)*p1.y + 3*t*t*aux*p2.y + t*t*t*p3.y;
     position.z = pow(aux,3)*p0.z + 3*t*pow(aux,2)*p1.z + 3*t*t*aux*p2.z + t*t*t*p3.z;
     t += 1.0 / (speed/deltaTime);
-    LookToTarget();
+    //LookToTarget();
 
     if(t > 1)
     {
@@ -72,9 +72,9 @@ void EnemyShip::MoveEShip(float deltaTime)
         p2.y = rand()%4+5;
         p2.z = rand()%20;
 
-        p3.x = target->x;
+        p3.x = rand()%20;
         p3.y = rand()%4+5;
-        p3.z = target->z;
+        p3.z = rand()%20;
     };
 }
 // **********************************************************************
@@ -83,23 +83,15 @@ void EnemyShip::MoveEShip(float deltaTime)
 // **********************************************************************
 void EnemyShip::LookToTarget()
 {
-    Vector3 v1 = Vector3(target->x - position.x, target->y - position.y, target->z - position.z);
+    Vector3 v1 = Vector3(target->x - position.x, 0,target->z - position.z);
     Vector3 v2 = Vector3(1, 0, 0);
 
-    float scaleProduct = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-    float module = sqrt(v1.x*v1.x + v1.y*v1.y + v1.z*v1.z)*sqrt(v2.x*v2.x + v2.y*v2.y + v2.z*v2.z);
+    float scaleProduct = v1.x*v2.x + v1.z*v2.z;
+    float module = sqrt(v1.x*v1.x + v1.z*v1.z)*sqrt(v2.x*v2.x + v2.z*v2.z);
     float newAngle = acos(scaleProduct/module) * DEGTORAD;
 
     angle = (target->z < position.z) ? -newAngle:newAngle;
-}
-// **********************************************************************
-// void Shoot()
-// Dispara uma bala no cenario
-// **********************************************************************
-void EnemyShip::Shoot()
-{/*
-    Bullet* bullet = new Bullet(new Position(coordinate->x,coordinate->y),angle,xLimit,yLimit, bulletModel);
-    bullets->push_back(bullet);*/
+    printf("%f %f\n", target->x, target->z);
 }
 // **********************************************************************
 // bool CanShoot()

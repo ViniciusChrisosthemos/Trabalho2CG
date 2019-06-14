@@ -11,12 +11,11 @@ Object::Object()
     inGame = true;
 }
 
-void Object::SetObject(Vector3 pos, Model* model, float angle, float scale)
+void Object::SetObject(Vector3 pos, Model* model, float angle)
 {
     position = pos;
     this->model = model;
     this->angle = angle;
-    this->scale = scale;
 }
 
 void Object::SetPosition(float x, float y, float z)

@@ -8,9 +8,12 @@ class Model
         Triangle* triangles;
         float width;
         float height;
+        float depth;
+        float scale;
         unsigned int modelSize;
 
         Model();
+        void SetScale(float scale);
         virtual ~Model();
 
     protected:

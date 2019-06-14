@@ -15,11 +15,10 @@ class Object
         Vector3 position;
         Model* model;
         float angle;
-        float scale;
         bool inGame;
 
         Object();
-        void SetObject(Vector3 pos, Model* model, float angle, float scale);
+        void SetObject(Vector3 pos, Model* model, float angle);
         void SetPosition(float x, float y, float z);
         void Render();
         virtual ~Object();

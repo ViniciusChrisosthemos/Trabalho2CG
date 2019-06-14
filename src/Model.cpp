@@ -7,6 +7,15 @@ Model::Model()
 {
     modelSize = 0;
     triangles = NULL;
+    scale = 1.0f;
+}
+
+void Model::SetScale(float scale)
+{
+    this->scale = scale;
+    height = height * scale;
+    width = width * scale;
+    depth = depth * scale;
 }
 
 Model::~Model()

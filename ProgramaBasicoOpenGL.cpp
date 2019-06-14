@@ -47,7 +47,6 @@ void DrawTriangle(const Triangle &triangle);
 void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
-void UnitVector(Vector3 &vect);
 void MovePlayer();
 void DrawGUI();
 void Draw();
@@ -71,8 +70,19 @@ void Process()
     for(i=0; i<ga.enemysCont; i++)
     {
         ga.enemys[i].MoveEShip(deltaTime);
+        if(ga.enemys[i].CanShoot())
+        {
+            ga.bullets[ga.bulletsCont].SetBullet(ga.enemys[i].angle, ga.enemys[i].position, *(ga.enemys[i].target), ga.bulletModel[0], deltaTime);
+            ga.bulletsCont++;
+        }
     }
 
+    for(i=0; i<ga.bulletsCont; i++)
+    {
+        ga.bullets[i].Update(deltaTime);
+    }
+
+    /*
     for(i=0; i<ga.spawnersCont; i++)
     {
         ga.energySpawners[i].Update();
@@ -83,7 +93,7 @@ void Process()
                 ga.energySpawners[i].active = false;
             }
         }
-    }
+    }*/
 }
 
 void DrawGUI()
@@ -129,20 +139,6 @@ void MovePlayer()
     }
 }
 
-void UnitVector(Vector3 &vect)
-{
-    float module;
-
-    module = sqrt(vect.x*vect.x + vect.y*vect.y + vect.z*vect.z);
-
-    if(module != 0.0f)
-    {
-        vect.x /= module;
-        vect.y /= module;
-        vect.z /= module;
-    }
-}
-
 void ProdVector(const Vector3 &v1, const Vector3 &v2, Vector3 &prodVect)
 {
     prodVect.x = v1.y * v2.z - (v1.z * v2.y);
@@ -161,7 +157,7 @@ void GetNormalVector(Triangle &triangle)
                            triangle.vertexs[2].z - triangle.vertexs[0].z);
 
     ProdVector(vet1, vet2, triangle.normal);
-    UnitVector(triangle.normal);
+    triangle.normal.UnitVector();
 }
 
 void SetColor(string hex, ColorRGB &colorRGB)
@@ -220,7 +216,8 @@ void LoadModel(Model &model, const char* name)
         model.triangles[triangle].color = color;
         GetNormalVector(model.triangles[triangle]);
         model.width = maxVertex.x;
-        model.height = maxVertex.z;
+        model.height = maxVertex.y;
+        model.depth = maxVertex.z;
     }
 
     file.close();
@@ -263,6 +260,7 @@ void GameManager::LoadScenario(char* fileName)
     ifstream file(fileName);
     string temp;
     const char* nameModel;
+    float scale;
     int cont = 0;
     int pixel;
     int currentObj;
@@ -281,17 +279,21 @@ void GameManager::LoadScenario(char* fileName)
     while(cont < modelsCont)
     {
         file >> temp;
+        file >> scale;
         nameModel = temp.c_str();
         LoadModel(models[cont], nameModel);
+        models[cont].SetScale(scale);
         cont++;
     }
     //Le quantidade de spawners
     file >> spawnersCont;
     //Le modelo de spawner
     file >> temp;
+    file >> scale;
     spawnerModel = new Model[1];
     nameModel = temp.c_str();
     LoadModel(spawnerModel[0], nameModel);
+    spawnerModel[0].SetScale(scale);
     energySpawners = new EnergySpawner[spawnersCont];
     int spawner = 0;
     //Le quantidade de objetos
@@ -316,12 +318,11 @@ void GameManager::LoadScenario(char* fileName)
             matrixConstraints[z][x] = pixel;
             if(pixel > 0)
             {
-                objects[currentObj].SetObject(Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell), &(models[pixel-1]), 0, 2);
+                objects[currentObj].SetObject(Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell), &(models[pixel-1]), 0);
                 currentObj++;
             }else if(pixel == -2)
             {
                 energySpawners[spawner] = EnergySpawner(&(spawnerModel[0]), Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell));
-                energySpawners[spawner].scale = 0.2f;
                 spawner++;
             }
         }
@@ -356,6 +357,11 @@ void GameManager::DrawScenario()
         ga.enemys[i].Render();
     }
 
+    for(i=0; i<bulletsCont; i++)
+    {
+        ga.bullets[i].Render();
+    }
+
     player.Render();
 }
 // **********************************************************************
@@ -368,7 +374,7 @@ void Object::Render()
     {
         glTranslated(position.x,position.y,position.z);
         glRotatef(angle,0,1,0);
-        glScalef(scale, scale, scale);
+        glScalef(model->scale, model->scale, model->scale);
         for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
         {
             glColor3f(model->triangles[triangle].color.r,
@@ -377,6 +383,14 @@ void Object::Render()
             DrawTriangle(model->triangles[triangle]);
 
         }
+
+        glBegin(GL_LINES);
+        {
+            glColor3f(1,0,0);
+            glVertex3f(0,0,0);
+            glVertex3f(0,0,20);
+        }
+        glEnd();
     }
     glPopMatrix();
 }
@@ -446,18 +460,25 @@ void init(void)
 
     ga.LoadScenario("map.txt");
 
+    ga.MAXBULLETS = 100;
+    ga.bulletsCont = 0;
+    ga.bulletModel = new Model[1];
+    LoadModel(ga.bulletModel[0], "bullet.tri");
+    ga.bulletModel[0].SetScale(0.1f);
+    ga.bullets = new Bullet[ga.MAXBULLETS];
+
     player.SetPosition(0,1,0);
     player.model = new Model[1];
     LoadModel(player.model[0], "player.tri");
-    player.scale = 0.1f;
+    player.model->SetScale(0.1f);
 
-    ga.enemysCont = 10;
+    ga.enemysCont = 1;
     ga.enemys = new EnemyShip[ga.enemysCont];
     ga.enemyModel = new Model[1];
     LoadModel(ga.enemyModel[0], "enemy.tri");
+    ga.enemyModel[0].SetScale(0.1f);
     for(int i=0; i<ga.enemysCont; i++)
     {
-        ga.enemys[i].scale = 0.1f;
         ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position));
     }
 }

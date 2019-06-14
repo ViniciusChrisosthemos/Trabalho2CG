@@ -5,6 +5,7 @@
 #include <time.h>
 #include <Vector3.h>
 #include <Model.h>
+#include <Bullet.h>
 
 class EnemyShip : public Object
 {
@@ -26,7 +27,6 @@ class EnemyShip : public Object
         bool BezieCompleted();
         void SetNewBezie(float maxX, float maxY, float maxZ);
         void LookToTarget();
-        void Shoot();
         bool CanShoot();
         virtual ~EnemyShip();
 

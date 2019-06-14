@@ -13,7 +13,7 @@ class GameManager
         Model* spawnerModel;
         Model* models;
         Model* enemyModel;
-        Model* bullet;
+        Model* bulletModel;
         Object* objects;
         EnergySpawner* energySpawners;
         EnemyShip* enemys;
@@ -23,8 +23,10 @@ class GameManager
         int objectsCont;
         int spawnersCont;
         int enemysCont;
+        int bulletsCont;
         int MAXXMATRIX;
         int MAXZMATRIX;
+        int MAXBULLETS;
         int sizeCell;
 
         GameManager();
