@@ -33,6 +33,7 @@ class GameManager
         void LoadScenario(char* fileName);
         void DrawScenario();
         void SetsObjectBoundary(const Object* obj);
+        bool CanMove(Vector3 position);
         void InitMatrix();
         virtual ~GameManager();
 

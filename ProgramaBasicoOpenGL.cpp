@@ -65,7 +65,7 @@ bool IsColliding(Object &obj1, Object &obj2)
 
 void Process()
 {
-    int i, j;
+    int i, j, k;
 
     MovePlayer();
 
@@ -78,10 +78,16 @@ void Process()
         {
             if(ga.enemys[i].bullets[j].inGame)
             {
+                // Colisão com o jogador
                 if(IsColliding(player, ga.enemys[i].bullets[j]))
                 {
                     ga.enemys[i].bullets[j].inGame = false;
                     player.battery -= ga.enemys[i].bullets[j].damage;
+                }
+                //Colisão com objetos no cenário
+                for(k=0; k<ga.objectsCont; k++)
+                {
+                    if(IsColliding(ga.objects[k], ga.enemys[i].bullets[j])) ga.enemys[i].bullets[j].inGame = false;
                 }
             }
         }
@@ -144,24 +150,16 @@ void MovePlayer()
 
     if(GetKeyState('W') & 0x8000)
     {
-        /*
-        int x = newPosition.x / ga.sizeCell;
-        int z = newPosition.z / ga.sizeCell;
-
-        if(x > ga.MAXXMATRIX) newPosition.x = ga.MAXX;
-        else if(x < 0) newPosition.x = 0;
-        if(z > ga.MAXZMATRIX) newPosition.z = ga.MAXZ;
-        else if(z < 0)
+        Vector3 alfa = player.Move(deltaTime);
+        Vector3 newPos = Vector3(player.position.x + alfa.x, player.position.y, player.position.z + alfa.z);
+        if(ga.CanMove(newPos))
         {
-            newPosition.z = 0;
-        }else
-        {
-            player.position = newPosition;
-            player.target->x = newPosition.x;
-            player.target->z = newPosition.z;
-
+            player.position = newPos;
+            player.target->x += alfa.x;
+            player.target->z += alfa.z;
         }
-        */
+
+        cout << player.position.x << " " << player.position.z << "\n";
     }
 }
 
@@ -345,6 +343,7 @@ void GameManager::LoadScenario(char* fileName)
             {
                 objects[currentObj].SetObject(Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell), &(models[pixel-1]), 0);
                 SetsObjectBoundary(&(objects[currentObj]));
+                cout << "OBJ -> " << objects[currentObj].model->width << " " << objects[currentObj].model->height << " " << objects[currentObj].model->depth << "\n";
                 currentObj++;
             }else if(pixel == -1)
             {
@@ -496,7 +495,7 @@ void init(void)
     player.model->SetScale(0.1f);
     cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
 
-    ga.enemysCont = 1;
+    ga.enemysCont = 10;
     ga.enemys = new EnemyShip[ga.enemysCont];
     ga.enemyModel = new Model[1];
     LoadModel(ga.enemyModel[0], "enemy.tri");

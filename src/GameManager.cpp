@@ -42,6 +42,18 @@ void GameManager::InitMatrix()
     }
 }
 
+bool GameManager::CanMove(Vector3 position)
+{
+    if(position.x > MAXX) return false;
+    if(position.x < 0) return false;
+    if(position.z > MAXZ) return false;
+    if(position.z < 0) return false;
+    int x = (int) position.x;
+    int z = (int) position.z;
+
+    return matrix[z][x];
+}
+
 GameManager::~GameManager()
 {
     delete spawnerModel;

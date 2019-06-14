@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1560535020 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1560545041 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -412,11 +412,12 @@
 	<Vector3.h>
 	<ColorRGB.h>
 
-1560535762 source:c:\users\vinic\desktop\git\trabalho2cg\src\gamemanager.cpp
+1560539206 source:c:\users\vinic\desktop\git\trabalho2cg\src\gamemanager.cpp
 	"GameManager.h"
 	<stdio.h>
+	<math.h>
 
-1560534780 c:\users\vinic\desktop\git\trabalho2cg\include\gamemanager.h
+1560537779 c:\users\vinic\desktop\git\trabalho2cg\include\gamemanager.h
 	<Model.h>
 	<Object.h>
 	<string>
