@@ -13,7 +13,7 @@ Bullet::Bullet()
 void Bullet::Update(float deltaTime)
 {
     time(&currentTime);
-    if(currentTime > lifeTime) inGame = false;
+    if((currentTime > lifeTime) | (position.x < 0) | (position.y < 0) | (position.z < 0)) inGame = false;
     else position = position.Sum(alfa.Produt(speed * deltaTime));
 }
 

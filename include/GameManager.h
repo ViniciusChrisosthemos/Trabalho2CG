@@ -17,21 +17,23 @@ class GameManager
         Object* objects;
         EnergySpawner* energySpawners;
         EnemyShip* enemys;
-        char** matrixConstraints;
+        bool** matrix;
         int modelsCont;
         int objectsCont;
         int spawnersCont;
         int enemysCont;
-        int MAXXMATRIX;
-        int MAXZMATRIX;
         int MAXX;
         int MAXY;
         int MAXZ;
+        int XMATRIX;
+        int ZMATRIX;
         int sizeCell;
 
         GameManager();
         void LoadScenario(char* fileName);
         void DrawScenario();
+        void SetsObjectBoundary(const Object* obj);
+        void InitMatrix();
         virtual ~GameManager();
 
     protected:

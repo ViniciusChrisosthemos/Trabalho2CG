@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1560522147 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1560535020 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -412,10 +412,11 @@
 	<Vector3.h>
 	<ColorRGB.h>
 
-1560483215 source:c:\users\vinic\desktop\git\trabalho2cg\src\gamemanager.cpp
+1560535762 source:c:\users\vinic\desktop\git\trabalho2cg\src\gamemanager.cpp
 	"GameManager.h"
+	<stdio.h>
 
-1560483138 c:\users\vinic\desktop\git\trabalho2cg\include\gamemanager.h
+1560534780 c:\users\vinic\desktop\git\trabalho2cg\include\gamemanager.h
 	<Model.h>
 	<Object.h>
 	<string>
@@ -423,11 +424,11 @@
 	<EnemyShip.h>
 	<Bullet.h>
 
-1560485028 source:c:\users\vinic\desktop\git\trabalho2cg\src\player.cpp
+1560531989 source:c:\users\vinic\desktop\git\trabalho2cg\src\player.cpp
 	"Player.h"
 	<math.h>
 
-1560485062 c:\users\vinic\desktop\git\trabalho2cg\include\player.h
+1560531029 c:\users\vinic\desktop\git\trabalho2cg\include\player.h
 	<Object.h>
 	<Vector3.h>
 
@@ -474,7 +475,7 @@
 	<time.h>
 	<Vector3.h>
 
-1560522619 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
+1560530256 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
 	"Bullet.h"
 	<math.h>
 	<Model.h>

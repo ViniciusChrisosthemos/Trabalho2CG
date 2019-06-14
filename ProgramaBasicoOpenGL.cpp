@@ -109,38 +109,7 @@ void DrawGUI()
 
 void MovePlayer()
 {
-    if(GetKeyState('W') & 0x8000)
-    {
-        //player.Move(deltaTime);
-        float alfa = 10 * deltaTime;
-        float angleRad = 0.01745329251*player.angle;
-        mainCamera->observer->x += sin(angleRad) * alfa;
-        mainCamera->observer->z += cos(angleRad) * alfa;
-
-        mainCamera->target->x += sin(angleRad) * alfa;
-        mainCamera->target->z += cos(angleRad) * alfa;
-
-        player.position.x += sin(angleRad) * alfa;
-        player.position.z += cos(angleRad) * alfa;
-        /*
-        int x = newPosition.x / ga.sizeCell;
-        int z = newPosition.z / ga.sizeCell;
-
-        if(x > ga.MAXXMATRIX) newPosition.x = ga.MAXX;
-        else if(x < 0) newPosition.x = 0;
-        if(z > ga.MAXZMATRIX) newPosition.z = ga.MAXZ;
-        else if(z < 0)
-        {
-            newPosition.z = 0;
-        }else
-        {
-            player.position = newPosition;
-            player.target->x = newPosition.x;
-            player.target->z = newPosition.z;
-
-        }
-        */
-    }
+    int i;
 
     if(GetKeyState('A') & 0x8000)
     {
@@ -170,6 +139,29 @@ void MovePlayer()
     if(GetKeyState('L') & 0x8000)
     {
         mainCamera->target->x -= 5 * deltaTime;
+    }
+
+
+    if(GetKeyState('W') & 0x8000)
+    {
+        /*
+        int x = newPosition.x / ga.sizeCell;
+        int z = newPosition.z / ga.sizeCell;
+
+        if(x > ga.MAXXMATRIX) newPosition.x = ga.MAXX;
+        else if(x < 0) newPosition.x = 0;
+        if(z > ga.MAXZMATRIX) newPosition.z = ga.MAXZ;
+        else if(z < 0)
+        {
+            newPosition.z = 0;
+        }else
+        {
+            player.position = newPosition;
+            player.target->x = newPosition.x;
+            player.target->z = newPosition.z;
+
+        }
+        */
     }
 }
 
@@ -296,9 +288,7 @@ void GameManager::LoadScenario(char* fileName)
     const char* nameModel;
     float scale;
     int cont = 0;
-    int pixel;
-    int currentObj;
-    int halfCell;
+    int pixel, currentObj, halfCell;
 
     if(file == NULL)
     {
@@ -333,38 +323,37 @@ void GameManager::LoadScenario(char* fileName)
     //Le quantidade de objetos
     file >> objectsCont;
     //Le dimensoes da matriz
-    file >> MAXXMATRIX;
+    file >> XMATRIX;
     file >> MAXY;
-    file >> MAXZMATRIX;
+    file >> ZMATRIX;
     //Le dimensoes do cenario
     file >> sizeCell;
     halfCell = sizeCell/2;
+    MAXX = XMATRIX * sizeCell;
+    MAXZ = ZMATRIX * sizeCell;
     //Cria os objetos
     objects = new Object[objectsCont];
     currentObj = 0;
     int x,z;
-    matrixConstraints = new char*[MAXZMATRIX];
-    for(z=0; z<MAXZMATRIX; z++)
+    InitMatrix();
+    for(z=0; z<ZMATRIX; z++)
     {
-        matrixConstraints[z] = new char[MAXXMATRIX];
-        for(x=0; x<MAXXMATRIX; x++)
+        for(x=0; x<XMATRIX; x++)
         {
             file >> pixel;
-            matrixConstraints[z][x] = pixel;
             if(pixel > 0)
             {
                 objects[currentObj].SetObject(Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell), &(models[pixel-1]), 0);
+                SetsObjectBoundary(&(objects[currentObj]));
                 currentObj++;
-            }else if(pixel == -2)
+            }else if(pixel == -1)
             {
                 energySpawners[spawner] = EnergySpawner(&(spawnerModel[0]), Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell));
                 spawner++;
             }
         }
     }
-    ga.sizeCell = sizeCell;
-    ga.MAXX = ga.MAXXMATRIX * sizeCell;
-    ga.MAXZ = ga.MAXZMATRIX * sizeCell;
+    cout << "-->>" << ga.MAXX << " " << ga.MAXZ << "\n";
     file.close();
 }
 // **********************************************************************
@@ -374,12 +363,12 @@ void GameManager::LoadScenario(char* fileName)
 void GameManager::DrawScenario()
 {
     int i, j;
-/*
+
     for(i=0; i<objectsCont; i++)
     {
         objects[i].Render();
     }
-*/
+
     for(i=0; i<spawnersCont; i++)
     {
         if(energySpawners[i].inGame)
@@ -501,7 +490,7 @@ void init(void)
     ga.bulletModel[0].SetScale(0.1f);
     cout << "Bullet -> " << ga.bulletModel[0].width << " " << ga.bulletModel[0].height << " " << ga.bulletModel[0].depth << "\n";
 
-    player.SetPosition(0,1,0);
+    player.SetPosition(0,0,0);
     player.model = new Model[1];
     LoadModel(player.model[0], "player.tri");
     player.model->SetScale(0.1f);
@@ -516,6 +505,9 @@ void init(void)
     {
         ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position), &(ga.bulletModel[0]));
     }
+
+    mainCamera->SetObserver(&(player.position), player.angle);
+    mainCamera->SetTarget(player.target);
 }
 // **********************************************************************
 //  void PosicUser()
@@ -538,8 +530,8 @@ void PosicUser()
                   0.0f,1.0f,0.0f);
     */
     glRotatef(player.angle*-1, 0,1,0);
-    gluLookAt(mainCamera->observer->x, mainCamera->observer->y, mainCamera->observer->z,
-              mainCamera->target->x, mainCamera->target->y, mainCamera->target->z,
+    gluLookAt(mainCamera->observer->x, mainCamera->observer->y+1, mainCamera->observer->z,
+              mainCamera->target->x, mainCamera->target->y+1, mainCamera->target->z,
                   0.0f,1.0f,0.0f);
 }
 // **********************************************************************
@@ -728,6 +720,14 @@ int main ( int argc, char** argv )
 	glutCreateWindow    ( "Computacao Grafica - Exemplo Basico 3D" );
 
 	init ();
+	for(int i=0; i<ga.MAXZ; i++)
+    {
+        for(int j=0; j<ga.MAXX; j++)
+        {
+            cout << ga.matrix[i][j] << " ";
+        }
+        cout << "\n";
+    }
 
 	glutDisplayFunc ( display );
 	glutReshapeFunc ( reshape );
