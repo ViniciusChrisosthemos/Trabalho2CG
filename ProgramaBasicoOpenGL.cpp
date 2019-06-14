@@ -69,11 +69,13 @@ void Process()
 
     MovePlayer();
 
-    // Atualiza os valores das naves e seus disparos, verificando colisões
+    // Processa dados das naves inimigas
     for(i=0; i<ga.enemysCont; i++)
     {
         ga.enemys[i].Update(deltaTime);
-
+        // Verifica se o trajeto da bezie já terminou para gerar outro
+        if(ga.enemys[i].BezieCompleted()) ga.enemys[i].SetNewBezie(ga.MAXX, ga.MAXY, ga.MAXZ);
+        // Processa dados dos disparos ativos
         for(j=0; j<ga.enemys[i].MAXBULLETS; j++)
         {
             if(ga.enemys[i].bullets[j].inGame)

@@ -16,14 +16,6 @@ EnemyShip::EnemyShip()
 
 }
 // **********************************************************************
-// ~EnemyShip()
-// Desconstrutor da Classe EnemyShip
-// **********************************************************************
-EnemyShip::~EnemyShip()
-{
-
-}
-// **********************************************************************
 // void EnemyShip::SetEnemyShip(Model* model, Vector3* target)
 // Define os atributos de uma nave inimiga
 // **********************************************************************
@@ -34,9 +26,9 @@ void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
         this->bulletModel = bulletModel;
         position = Vector3(0,5,0);
         p0 = Vector3(0,5,0);
-        p1 = Vector3(20,5,0);
-        p2 = Vector3(20,5,20);
-        p3 = Vector3(0,5,20);
+        p1 = Vector3(0,5,0);
+        p2 = Vector3(0,5,0);
+        p3 = Vector3(0,5,0);
         fireRate = rand()%3 + 2;
         time(NULL);
         time(&currentTime);
@@ -58,28 +50,8 @@ void EnemyShip::MoveEShip(float deltaTime)
     position.x = pow(aux,3)*p0.x + 3*t*pow(aux,2)*p1.x + 3*t*t*aux*p2.x + t*t*t*p3.x;
     position.y = pow(aux,3)*p0.y + 3*t*pow(aux,2)*p1.y + 3*t*t*aux*p2.y + t*t*t*p3.y;
     position.z = pow(aux,3)*p0.z + 3*t*pow(aux,2)*p1.z + 3*t*t*aux*p2.z + t*t*t*p3.z;
-    t += 1.0 / (speed/deltaTime);
+    t += deltaTime/speed;
     //LookToTarget();
-
-    if(t > 1)
-    {
-        t = 0;
-        p0.x = p3.x;
-        p0.y = p3.y;
-        p0.z = p3.z;
-
-        p1.x = p3.x*2.0 - p2.x;
-        p1.y = p3.y*2.0 - p2.y;
-        p1.z = p3.z*2.0 - p2.z;
-
-        p2.x = rand()%20;
-        p2.y = rand()%4+5;
-        p2.z = rand()%20;
-
-        p3.x = rand()%20;
-        p3.y = rand()%4+5;
-        p3.z = rand()%20;
-    };
 }
 // **********************************************************************
 // void LookToTarget()
@@ -141,4 +113,39 @@ void EnemyShip::Update(float deltaTime)
             bullets[i].Update(deltaTime);
         }
     }
+}
+
+bool EnemyShip::BezieCompleted()
+{
+    return t >= 1.0f;
+}
+
+void EnemyShip::SetNewBezie(float maxX, float maxY, float maxZ)
+{
+    t = 0;
+
+    p0.x = p3.x;
+    p0.y = p3.y;
+    p0.z = p3.z;
+
+    p1.x = p3.x*2.0 - p2.x;
+    p1.y = p3.y*2.0 - p2.y;
+    p1.z = p3.z*2.0 - p2.z;
+
+    p2.x = rand()% (int) maxX;
+    p2.y = rand()% (int) maxY+5;
+    p2.z = rand()% (int) maxZ;
+
+    p3.x = rand()% (int) maxX;
+    p3.y = rand()% (int) maxY+5;
+    p3.z = rand()% (int) maxZ;
+}
+
+// **********************************************************************
+// ~EnemyShip()
+// Desconstrutor da Classe EnemyShip
+// **********************************************************************
+EnemyShip::~EnemyShip()
+{
+
 }
