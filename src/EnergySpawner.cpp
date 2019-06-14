@@ -9,7 +9,6 @@ EnergySpawner::EnergySpawner(Model *model, Vector3 position)
 {
     time(0);
 
-    active = true;
     angle = 0.0f;
     countdown = 5;
     energyCharge = 50;
@@ -22,13 +21,13 @@ EnergySpawner::EnergySpawner(Model *model, Vector3 position)
 
 void EnergySpawner::Update()
 {
-    if(!active)
+    if(!inGame)
     {
         time(&currentTime);
         if(currentTime >= nextTimeActive)
         {
             nextTimeActive = currentTime + countdown;
-            active = true;
+            inGame = true;
         }
     }
 }

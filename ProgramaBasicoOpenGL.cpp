@@ -69,6 +69,7 @@ void Process()
 
     MovePlayer();
 
+    // Atualiza os valores das naves e seus disparos, verificando colisões
     for(i=0; i<ga.enemysCont; i++)
     {
         ga.enemys[i].Update(deltaTime);
@@ -79,11 +80,25 @@ void Process()
             {
                 if(IsColliding(player, ga.enemys[i].bullets[j]))
                 {
-                    cout << "AQUI!!!!\n";
+                    ga.enemys[i].bullets[j].inGame = false;
+                    player.battery -= ga.enemys[i].bullets[j].damage;
                 }
             }
         }
+    }
 
+    // Verifica colisões com EnergySpawners e atualiza seus atributos
+    for(i=0; i<ga.spawnersCont; i++)
+    {
+        ga.energySpawners[i].Update();
+        if(ga.energySpawners[i].inGame)
+        {
+            if(IsColliding(player, ga.energySpawners[i]))
+            {
+                ga.energySpawners[i].inGame = false;
+                player.battery += ga.energySpawners[i].energyCharge;
+            }
+        }
     }
 }
 
@@ -135,6 +150,26 @@ void MovePlayer()
     if(GetKeyState('D') & 0x8000)
     {
         player.Rotate(-deltaTime);
+    }
+
+    if(GetKeyState('I') & 0x8000)
+    {
+        mainCamera->target->y += 5 * deltaTime;
+    }
+
+    if(GetKeyState('J') & 0x8000)
+    {
+        mainCamera->target->x += 5 * deltaTime;
+    }
+
+    if(GetKeyState('K') & 0x8000)
+    {
+        mainCamera->target->y -= 5 * deltaTime;
+    }
+
+    if(GetKeyState('L') & 0x8000)
+    {
+        mainCamera->target->x -= 5 * deltaTime;
     }
 }
 
@@ -344,15 +379,15 @@ void GameManager::DrawScenario()
     {
         objects[i].Render();
     }
-
+*/
     for(i=0; i<spawnersCont; i++)
     {
-        if(energySpawners[i].active)
+        if(energySpawners[i].inGame)
         {
             energySpawners[i].Render();
         }
     }
-*/
+
     for(i=0; i<enemysCont; i++)
     {
         ga.enemys[i].Render();

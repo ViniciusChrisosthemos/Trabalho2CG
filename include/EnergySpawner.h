@@ -8,7 +8,6 @@
 class EnergySpawner : public Object
 {
     public:
-        bool active;
         int energyCharge;
         int countdown;
         time_t nextTimeActive;
