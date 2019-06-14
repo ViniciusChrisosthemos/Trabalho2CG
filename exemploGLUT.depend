@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1560476391 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1560477362 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -463,7 +463,7 @@
 	<Model.h>
 	<Bullet.h>
 
-1560037203 source:c:\users\vinic\desktop\git\trabalho2cg\src\energyspawner.cpp
+1560477389 source:c:\users\vinic\desktop\git\trabalho2cg\src\energyspawner.cpp
 	"EnergySpawner.h"
 	<Model.h>
 	<time.h>
@@ -474,7 +474,7 @@
 	<time.h>
 	<Vector3.h>
 
-1560476344 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
+1560476929 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
 	"Bullet.h"
 	<math.h>
 	<Model.h>

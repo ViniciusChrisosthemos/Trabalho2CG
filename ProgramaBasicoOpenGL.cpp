@@ -54,10 +54,12 @@ void Process();
 
 bool IsColliding(Object &obj1, Object &obj2)
 {
-    if((obj2.position.x + obj2.model->width) < obj1.position.x) return false;
-    if((obj2.position.x - obj2.model->width) > obj1.position.x) return false;
-    if((obj2.position.z + obj2.model->height) < obj1.position.z) return false;
-    if((obj2.position.z - obj2.model->height) > obj1.position.z) return false;
+    if((obj2.position.x + obj2.model->width) < obj1.position.x - obj1.model->width) return false;
+    if((obj2.position.x - obj2.model->width) > obj1.position.x + obj1.model->width) return false;
+    if((obj2.position.y + obj2.model->height) < obj1.position.y - obj1.model->height) return false;
+    if((obj2.position.y - obj2.model->height) > obj1.position.y + obj1.model->height) return false;
+    if((obj2.position.z + obj2.model->depth) < obj1.position.z - obj1.model->depth) return false;
+    if((obj2.position.z - obj2.model->depth) > obj1.position.z - obj1.model->depth) return false;
     return true;
 }
 
@@ -66,7 +68,7 @@ void Process()
     int i;
 
     MovePlayer();
-
+/*
     for(i=0; i<ga.enemysCont; i++)
     {
         ga.enemys[i].MoveEShip(deltaTime);
@@ -81,9 +83,9 @@ void Process()
     {
         ga.bullets[i].Update(deltaTime);
     }
+*/
 
-    /*
-    for(i=0; i<ga.spawnersCont; i++)
+    for(i=0; i</*ga.spawnersCont*/1; i++)
     {
         ga.energySpawners[i].Update();
         if(ga.energySpawners[i].active)
@@ -93,7 +95,7 @@ void Process()
                 ga.energySpawners[i].active = false;
             }
         }
-    }*/
+    }
 }
 
 void DrawGUI()
@@ -338,20 +340,20 @@ void GameManager::LoadScenario(char* fileName)
 void GameManager::DrawScenario()
 {
     int i;
-
+/*
     for(i=0; i<objectsCont; i++)
     {
         objects[i].Render();
     }
-
-    for(i=0; i<spawnersCont; i++)
+*/
+    for(i=0; i</*spawnersCont*/1; i++)
     {
         if(energySpawners[i].active)
         {
             energySpawners[i].Render();
         }
     }
-
+/*
     for(i=0; i<enemysCont; i++)
     {
         ga.enemys[i].Render();
@@ -361,7 +363,7 @@ void GameManager::DrawScenario()
     {
         ga.bullets[i].Render();
     }
-
+*/
     player.Render();
 }
 // **********************************************************************
