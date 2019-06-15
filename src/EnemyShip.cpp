@@ -133,11 +133,11 @@ void EnemyShip::SetNewBezie(float maxX, float maxY, float maxZ)
     p1.z = p3.z*2.0 - p2.z;
 
     p2.x = rand()% (int) maxX;
-    p2.y = rand()% (int) maxY+5;
+    p2.y = rand()% (int) maxY+10;
     p2.z = rand()% (int) maxZ;
 
     p3.x = rand()% (int) maxX;
-    p3.y = rand()% (int) maxY+5;
+    p3.y = rand()% (int) maxY+10;
     p3.z = rand()% (int) maxZ;
 }
 

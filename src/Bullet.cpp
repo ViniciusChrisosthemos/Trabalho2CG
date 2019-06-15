@@ -13,7 +13,7 @@ Bullet::Bullet()
 void Bullet::Update(float deltaTime)
 {
     time(&currentTime);
-    if((currentTime > lifeTime) | (position.x < 0) | (position.y < 0) | (position.z < 0)) inGame = false;
+    if((currentTime > lifeTime) | (position.y < -1)) inGame = false;
     else position = position.Sum(alfa.Produt(speed * deltaTime));
 }
 
@@ -21,7 +21,7 @@ void Bullet::SetBullet(float &angle, Vector3 &position, Vector3 &target, Model *
 {
     this->model = model;
     this->position = position;
-    speed = 50.0f;
+    speed = 100.0f;
     damage = 10;
 
     alfa = Vector3(target.x - position.x, target.y - position.y, target.z - position.z);

@@ -29,6 +29,9 @@ void EnergySpawner::Update()
             nextTimeActive = currentTime + countdown;
             inGame = true;
         }
+    }else
+    {
+        angle += 10.0f;
     }
 }
 

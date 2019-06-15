@@ -14,6 +14,7 @@ class GameManager
         Model* models;
         Model* enemyModel;
         Model* bulletModel;
+        Object gameoverObject;
         Object* objects;
         EnergySpawner* energySpawners;
         EnemyShip* enemys;

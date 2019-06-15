@@ -41,6 +41,7 @@ GameManager ga = GameManager();
 Player player = Player(10);
 STATUS status = INGAME;
 float deltaTime = 0;
+Model model;
 
 bool IsColliding(Object &obj1, Object &obj2);
 void LoadModel(Model &model, const char* name);
@@ -57,7 +58,8 @@ void GameOver();
 
 void GameOver()
 {
-
+    ga.gameoverObject.Render();
+    cout << mainCamera->observer->x << " " << mainCamera->observer->z <<" \n";
 }
 
 bool IsColliding(Object &obj1, Object &obj2)
@@ -125,9 +127,9 @@ void Process()
 
 void DrawGUI()
 {
-    int x = -8;
-    int y = ga.HEIGHTSCREEN - 110;
-    int width = 1;
+    int x = -9;
+    int y = ga.HEIGHTSCREEN - 105;
+    int width = 2;
     glColor3f(1,0,0);
     glBegin(GL_QUADS);
     {
@@ -141,8 +143,6 @@ void DrawGUI()
 
 void MovePlayer()
 {
-    int i;
-
     if(GetKeyState('A') & 0x8000)
     {
         player.Rotate(deltaTime);
@@ -183,6 +183,8 @@ void MovePlayer()
             player.position = newPos;
             player.target->x += alfa.x;
             player.target->z += alfa.z;
+
+            player.Discharge();
         }
     }
 }
@@ -372,7 +374,7 @@ void GameManager::LoadScenario(char* fileName)
                 currentObj++;
             }else if(pixel == -1)
             {
-                energySpawners[spawner] = EnergySpawner(&(spawnerModel[0]), Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell));
+                energySpawners[spawner] = EnergySpawner(&(spawnerModel[0]), Vector3(x*sizeCell + halfCell, 1, z*sizeCell + halfCell));
                 spawner++;
             }
         }
@@ -431,14 +433,6 @@ void Object::Render()
             DrawTriangle(model->triangles[triangle]);
 
         }
-
-        glBegin(GL_LINES);
-        {
-            glColor3f(1,0,0);
-            glVertex3f(0,0,0);
-            glVertex3f(0,0,20);
-        }
-        glEnd();
     }
     glPopMatrix();
 }
@@ -510,16 +504,17 @@ void init(void)
 
     ga.bulletModel = new Model[1];
     LoadModel(ga.bulletModel[0], "bullet.tri");
-    ga.bulletModel[0].SetScale(0.1f);
+    ga.bulletModel[0].SetScale(0.3f);
     cout << "Bullet -> " << ga.bulletModel[0].width << " " << ga.bulletModel[0].height << " " << ga.bulletModel[0].depth << "\n";
 
-    player.SetPosition(0,0,0);
+    player.SetPosition(6,0,6);
+    player.target = new Vector3(6,0,7);
     player.model = new Model[1];
     LoadModel(player.model[0], "player.tri");
-    player.model->SetScale(0.1f);
+    player.model->SetScale(0.2f);
     cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
 
-    ga.enemysCont = 0;
+    ga.enemysCont = 20;
     ga.enemys = new EnemyShip[ga.enemysCont];
     ga.enemyModel = new Model[1];
     LoadModel(ga.enemyModel[0], "enemy.tri");
@@ -529,10 +524,13 @@ void init(void)
         ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position), &(ga.bulletModel[0]));
     }
 
+    LoadModel(model, "gameover.tri");
+    model.SetScale(3.0f);
+    ga.gameoverObject.SetObject(Vector3(0,0,0), &model, 0);
+
+
     mainCamera->SetObserver(&(player.position), player.angle);
     mainCamera->SetTarget(player.target);
-
-    cout << "1\n";
 }
 // **********************************************************************
 //  void PosicUser()
@@ -548,10 +546,18 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-    glRotatef(player.angle*-1, 0,1,0);
-    gluLookAt(mainCamera->observer->x, mainCamera->observer->y+1, mainCamera->observer->z,
-              mainCamera->target->x, mainCamera->target->y+1, mainCamera->target->z,
+    if(status == INGAME)
+    {
+        glRotatef(player.angle*-1, 0,1,0);
+        gluLookAt(mainCamera->observer->x, mainCamera->observer->y+2, mainCamera->observer->z,
+                  mainCamera->target->x, mainCamera->target->y+2, mainCamera->target->z,
+                      0.0f,1.0f,0.0f);
+    }else
+    {
+        gluLookAt(8, 1, 20,
+                  8, 1, 0,
                   0.0f,1.0f,0.0f);
+    }
 }
 // **********************************************************************
 //  void reshape( int w, int h )
@@ -647,10 +653,10 @@ void display( void )
         DrawGUI();
     }else
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        DefineLuz();
+        PosicUser();
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glOrtho(0,ga.WIDTHSCREEN,0,ga.HEIGHTSCREEN,0,1);
 
         GameOver();
     }

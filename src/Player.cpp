@@ -5,7 +5,7 @@
 Player::Player(int speed)
 {
     battery = 100.0f;
-    batteryCost = 5.0f;
+    batteryCost = 0.05f;
     this->speed = speed;
     target = new Vector3(0,0,1);
 }
@@ -34,6 +34,12 @@ void Player::Charge(int charge)
 void Player::TakeDamage(int damage)
 {
     battery -= damage;
+    if(battery <= 0) inGame = false;
+}
+
+void Player::Discharge()
+{
+    battery -= batteryCost;
     if(battery <= 0) inGame = false;
 }
 

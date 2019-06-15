@@ -17,6 +17,7 @@ class Player : public Object
         void Rotate(float deltaTime);
         void Charge(int charge);
         void TakeDamage(int damage);
+        void Discharge();
         virtual ~Player();
 
     protected:
