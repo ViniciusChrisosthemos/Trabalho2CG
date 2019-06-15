@@ -2,9 +2,18 @@
 #include <Model.h>
 #include <time.h>
 #include <stdio.h>
-
+// **********************************************************************
+// EnergySpawner::EnergySpawner()
+// Construtor
+// **********************************************************************
 EnergySpawner::EnergySpawner(){}
-
+// **********************************************************************
+// EnergySpawner::EnergySpawner(Model *model, Vector3 position)
+// Construtor
+// Parametros:
+//      model: modelo do objeto para ser renderizado
+//      position: posição do obj
+// **********************************************************************
 EnergySpawner::EnergySpawner(Model *model, Vector3 position)
 {
     time(0);
@@ -19,6 +28,10 @@ EnergySpawner::EnergySpawner(Model *model, Vector3 position)
     this->model = model;
 }
 
+// **********************************************************************
+// void EnergySpawner::Update()
+// Atualiza dos atributos da classe
+// **********************************************************************
 void EnergySpawner::Update()
 {
     if(!inGame)
@@ -34,7 +47,10 @@ void EnergySpawner::Update()
         angle += 10.0f;
     }
 }
-
+// **********************************************************************
+// EnergySpawner::~EnergySpawner()
+// Desconstrutor
+// **********************************************************************
 EnergySpawner::~EnergySpawner()
 {
     //dtor

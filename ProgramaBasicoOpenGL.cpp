@@ -56,12 +56,21 @@ void Draw();
 void Process();
 void GameOver();
 
+// **********************************************************************
+// void GameOver()
+// Renderiza a tela de game over
+// **********************************************************************
 void GameOver()
 {
     ga.gameoverObject.Render();
-    cout << mainCamera->observer->x << " " << mainCamera->observer->z <<" \n";
 }
-
+// **********************************************************************
+// bool IsColliding(Object &obj1, Object &obj2)
+// Método que informa se 2 objetos se colidiram
+// Parametros:
+//      obj1: objeto 1
+//      obj2: objeto 2
+// **********************************************************************
 bool IsColliding(Object &obj1, Object &obj2)
 {
     if((obj2.position.x + obj2.model->width) < obj1.position.x - obj1.model->width) return false;
@@ -72,7 +81,10 @@ bool IsColliding(Object &obj1, Object &obj2)
     if((obj2.position.z - obj2.model->depth) > obj1.position.z + obj1.model->depth) return false;
     return true;
 }
-
+// **********************************************************************
+// void Process()
+// Método que processa os valores dos objetos a cada frame
+// **********************************************************************
 void Process()
 {
     if(player.inGame)
@@ -124,7 +136,10 @@ void Process()
         status = GAMEOVER;
     }
 }
-
+// **********************************************************************
+// void DrawGUI()
+// Desenha a interface do usuário
+// **********************************************************************
 void DrawGUI()
 {
     int x = -9;
@@ -140,7 +155,10 @@ void DrawGUI()
     }
     glEnd();
 }
-
+// **********************************************************************
+// void MovePlayer()
+// Processa as requisições do usuário para locomover o obj do jogador
+// **********************************************************************
 void MovePlayer()
 {
     if(GetKeyState('A') & 0x8000)
@@ -188,14 +206,12 @@ void MovePlayer()
         }
     }
 }
-
-void ProdVector(const Vector3 &v1, const Vector3 &v2, Vector3 &prodVect)
-{
-    prodVect.x = v1.y * v2.z - (v1.z * v2.y);
-    prodVect.y = v1.z * v2.x - (v1.x * v2.z);
-    prodVect.z = v1.x * v2.y - (v1.y * v2.x);
-}
-
+// **********************************************************************
+// void GetNormalVector(Triangle &triangle)
+// Define o vetor normal de um triangulo
+// Parametros:
+//      triangle: triangulo a ser calculado a normal
+// **********************************************************************
 void GetNormalVector(Triangle &triangle)
 {
     Vector3 vet1 = Vector3(triangle.vertexs[1].x - triangle.vertexs[0].x,
@@ -206,10 +222,16 @@ void GetNormalVector(Triangle &triangle)
                            triangle.vertexs[2].y - triangle.vertexs[0].y,
                            triangle.vertexs[2].z - triangle.vertexs[0].z);
 
-    ProdVector(vet1, vet2, triangle.normal);
+    triangle.normal = vet1.ProdVector(vet2);
     triangle.normal.UnitVector();
 }
-
+// **********************************************************************
+// void SetColor(string hex, ColorRGB &colorRGB)
+// Define uma cor com base no valor hexadecimal informado
+// Parametros:
+//      hex: valor hexadecimal a ser traduzido em cor
+//      colorRGB: cor a ser iniciada
+// **********************************************************************
 void SetColor(string hex, ColorRGB &colorRGB)
 {
     char color[2];
@@ -225,7 +247,13 @@ void SetColor(string hex, ColorRGB &colorRGB)
     color[1] = hex[7];
     colorRGB.b = ((float) strtol(color, 0, 16))/255.0f;
 }
-
+// **********************************************************************
+// void LoadModel(Model &model, const char* name)
+// Carrega um modelo de objeto de um arquivo .tri
+// Parametros:
+//      model: instancia do modelo a ser escrito
+//      name: nome do arquivo .tri
+// **********************************************************************
 void LoadModel(Model &model, const char* name)
 {
     ifstream file;
@@ -272,24 +300,12 @@ void LoadModel(Model &model, const char* name)
 
     file.close();
 }
-
-void DrawModel(const Model &model)
-{
-    glPushMatrix();
-    {
-        glTranslated(0,0,5);
-        glRotatef(AngY,0,1,0);
-        for(unsigned int triangle = 0; triangle < model.modelSize; triangle++)
-        {
-            glColor3f(model.triangles[triangle].color.r,
-                      model.triangles[triangle].color.g,
-                      model.triangles[triangle].color.b);
-            DrawTriangle(model.triangles[triangle]);
-        }
-    }
-    glPopMatrix();
-}
-
+// **********************************************************************
+// void DrawTriangle(const Triangle &triangle)
+// Método auxiliar de Object::Render() que desenha um triangulo
+// Parametros:
+//      triangle: triangulo a ser desenhado
+// **********************************************************************
 void DrawTriangle(const Triangle &triangle)
 {
     glBegin(GL_TRIANGLES);
@@ -304,6 +320,8 @@ void DrawTriangle(const Triangle &triangle)
 // **********************************************************************
 //  void GameManager::LoadScenario(string fileName)
 //  Carrega os modelos e objetos que estaram no cenario
+//  Parametros:
+//      fileName: nome do arquivo de configuração do mapa. Formato .txt
 // **********************************************************************
 void GameManager::LoadScenario(char* fileName)
 {
@@ -369,7 +387,7 @@ void GameManager::LoadScenario(char* fileName)
             if(pixel > 0)
             {
                 objects[currentObj].SetObject(Vector3(x*sizeCell + halfCell, 0, z*sizeCell + halfCell), &(models[pixel-1]), 0);
-                SetsObjectBoundary(&(objects[currentObj]));
+                SetsObjectBoundary(&(objects[currentObj].position), objects[currentObj].model);
                 cout << "OBJ -> " << objects[currentObj].model->width << " " << objects[currentObj].model->height << " " << objects[currentObj].model->depth << "\n";
                 currentObj++;
             }else if(pixel == -1)
@@ -439,8 +457,6 @@ void Object::Render()
 
 // **********************************************************************
 //  void DefineLuz(void)
-//
-//
 // **********************************************************************
 void DefineLuz(void)
 {
@@ -482,7 +498,6 @@ void DefineLuz(void)
 // **********************************************************************
 //  void init(void)
 //		Inicializa os parâmetros globais de OpenGL
-//
 // **********************************************************************
 void init(void)
 {
@@ -534,8 +549,6 @@ void init(void)
 }
 // **********************************************************************
 //  void PosicUser()
-//
-//
 // **********************************************************************
 void PosicUser()
 {
@@ -562,7 +575,6 @@ void PosicUser()
 // **********************************************************************
 //  void reshape( int w, int h )
 //		trata o redimensionamento da janela OpenGL
-//
 // **********************************************************************
 void reshape( int w, int h )
 {
@@ -582,55 +594,7 @@ void reshape( int w, int h )
 
 }
 // **********************************************************************
-//  void DesenhaCubo()
-//
-//
-// **********************************************************************
-void DesenhaCubo()
-{
-	glBegin ( GL_QUADS );
-		// Front Face
-		glNormal3f(0,0,1);
-		glVertex3f(-1.0f, -1.0f,  1.0f);
-		glVertex3f( 1.0f, -1.0f,  1.0f);
-		glVertex3f( 1.0f,  1.0f,  1.0f);
-		glVertex3f(-1.0f,  1.0f,  1.0f);
-		// Back Face
-		glNormal3f(0,0,-1);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f(-1.0f,  1.0f, -1.0f);
-		glVertex3f( 1.0f,  1.0f, -1.0f);
-		glVertex3f( 1.0f, -1.0f, -1.0f);
-		// Top Face
-		glNormal3f(0,1,0);
-		glVertex3f(-1.0f,  1.0f, -1.0f);
-		glVertex3f(-1.0f,  1.0f,  1.0f);
-		glVertex3f( 1.0f,  1.0f,  1.0f);
-		glVertex3f( 1.0f,  1.0f, -1.0f);
-		// Bottom Face
-		glNormal3f(0,-1,0);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f( 1.0f, -1.0f, -1.0f);
-		glVertex3f( 1.0f, -1.0f,  1.0f);
-		glVertex3f(-1.0f, -1.0f,  1.0f);
-		// Right face
-		glNormal3f(1,0,0);
-		glVertex3f( 1.0f, -1.0f, -1.0f);
-		glVertex3f( 1.0f,  1.0f, -1.0f);
-		glVertex3f( 1.0f,  1.0f,  1.0f);
-		glVertex3f( 1.0f, -1.0f,  1.0f);
-		// Left Face
-		glNormal3f(-1,0,0);
-		glVertex3f(-1.0f, -1.0f, -1.0f);
-		glVertex3f(-1.0f, -1.0f,  1.0f);
-		glVertex3f(-1.0f,  1.0f,  1.0f);
-		glVertex3f(-1.0f,  1.0f, -1.0f);
-	glEnd();
-}
-// **********************************************************************
 //  void display( void )
-//
-//
 // **********************************************************************
 void display( void )
 {
@@ -663,11 +627,8 @@ void display( void )
 
 	glutSwapBuffers();
 }
-
 // **********************************************************************
 //  void animate ( unsigned char key, int x, int y )
-//
-//
 // **********************************************************************
 void animate()
 {
@@ -704,11 +665,8 @@ void animate()
     // Redesenha
     glutPostRedisplay();
 }
-
 // **********************************************************************
 //  void keyboard ( unsigned char key, int x, int y )
-//
-//
 // **********************************************************************
 void keyboard ( unsigned char key, int x, int y )
 {
@@ -722,11 +680,8 @@ void keyboard ( unsigned char key, int x, int y )
       break;
   }
 }
-
 // **********************************************************************
 //  void arrow_keys ( int a_keys, int x, int y )
-//
-//
 // **********************************************************************
 void arrow_keys ( int a_keys, int x, int y )
 {
@@ -746,11 +701,8 @@ void arrow_keys ( int a_keys, int x, int y )
 			break;
 	}
 }
-
 // **********************************************************************
 //  void main ( int argc, char** argv )
-//
-//
 // **********************************************************************
 int main ( int argc, char** argv )
 {
@@ -771,7 +723,6 @@ int main ( int argc, char** argv )
 	glutMainLoop ( );
 
 	return 0;
-
 }
 
 

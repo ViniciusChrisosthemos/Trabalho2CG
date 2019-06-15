@@ -16,8 +16,12 @@ EnemyShip::EnemyShip()
 
 }
 // **********************************************************************
-// void EnemyShip::SetEnemyShip(Model* model, Vector3* target)
+// void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
 // Define os atributos de uma nave inimiga
+// Parametros:
+//      model: modelo do objeto para ser renderizado
+//      target: alvo em que a nave inimiga irá perseguir
+//      bulletModel: modelo do disparo da nave para ser renderizado
 // **********************************************************************
 void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
 {
@@ -40,9 +44,11 @@ void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
         bullets = new Bullet[MAXBULLETS];
 }
 // **********************************************************************
-// void MoveEShip()
+// void MoveEShip(float deltaTime)
 // Move a nave inimiga, alterando o valor de t na equação da Bézire,
 // se t == 1, calcula o segundo ponto e gera o terceiro com base na posição do target
+// Parametros:
+//      deltaTime: tempo entre cada frame para calcular o deslocamento
 // **********************************************************************
 void EnemyShip::MoveEShip(float deltaTime)
 {
@@ -84,7 +90,12 @@ bool EnemyShip::CanShoot()
     }
     return false;
 }
-
+// **********************************************************************
+// void EnemyShip::Shoot(float deltaTime)
+// Ativa uma bala(Bullet) para ser processada no cenário
+// Parametros:
+//      deltaTime: tempo entre cada frame para calcular o deslocamento
+// **********************************************************************
 void EnemyShip::Shoot(float deltaTime)
 {
     for(int i=0; i<MAXBULLETS; i++)
@@ -96,7 +107,12 @@ void EnemyShip::Shoot(float deltaTime)
         }
     }
 }
-
+// **********************************************************************
+// void EnemyShip::Update(float deltaTime)
+// Atualiza os atributos da nave inimiga
+// Parametros:
+//      deltaTime: tempo entre cada frame para calcular o deslocamento
+// **********************************************************************
 void EnemyShip::Update(float deltaTime)
 {
     MoveEShip(deltaTime);
@@ -114,12 +130,22 @@ void EnemyShip::Update(float deltaTime)
         }
     }
 }
-
+// **********************************************************************
+// bool EnemyShip::BezieCompleted()
+// Informa se a bezie da nave foi completada
+// **********************************************************************
 bool EnemyShip::BezieCompleted()
 {
     return t >= 1.0f;
 }
-
+// **********************************************************************
+// void EnemyShip::SetNewBezie(float maxX, float maxY, float maxZ)
+// Recalcula a bezie com base nos limites do cenário
+// Parametros:
+//      maxX: valor máximo de x
+//      maxY: valor máximo de y
+//      maxZ: valor máximo de z
+// **********************************************************************
 void EnemyShip::SetNewBezie(float maxX, float maxY, float maxZ)
 {
     t = 0;

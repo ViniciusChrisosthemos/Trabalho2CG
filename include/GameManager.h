@@ -35,7 +35,7 @@ class GameManager
         GameManager();
         void LoadScenario(char* fileName);
         void DrawScenario();
-        void SetsObjectBoundary(const Object* obj);
+        void SetsObjectBoundary(const Vector3* position, const Model* model);
         bool CanMove(Vector3 position);
         void InitMatrix();
         virtual ~GameManager();
