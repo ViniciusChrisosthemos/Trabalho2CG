@@ -39,7 +39,7 @@ void Bullet::SetBullet(float &angle, Vector3 &position, Vector3 &target, Model *
 {
     this->model = model;
     this->position = position;
-    speed = 100.0f;
+    speed = 200.0f;
     damage = 10;
 
     alfa = Vector3(target.x - position.x, target.y - position.y, target.z - position.z);

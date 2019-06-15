@@ -51,7 +51,4 @@ void EnergySpawner::Update()
 // EnergySpawner::~EnergySpawner()
 // Desconstrutor
 // **********************************************************************
-EnergySpawner::~EnergySpawner()
-{
-    //dtor
-}
+EnergySpawner::~EnergySpawner(){}

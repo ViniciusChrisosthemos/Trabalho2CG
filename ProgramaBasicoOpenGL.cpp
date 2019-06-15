@@ -35,13 +35,14 @@ using namespace std;
 #endif
 
 enum STATUS{GAMEOVER,INGAME};
+STATUS status = INGAME;
 GLfloat AspectRatio, AngY=0;
 Camera* mainCamera = new Camera(new Vector3(0,2,0), new Vector3(0,2,1));
 GameManager ga = GameManager();
 Player player = Player(10);
-STATUS status = INGAME;
-float deltaTime = 0;
 Model model;
+float deltaTime = 0;
+bool debug = false;
 
 bool IsColliding(Object &obj1, Object &obj2);
 void LoadModel(Model &model, const char* name);
@@ -87,7 +88,7 @@ bool IsColliding(Object &obj1, Object &obj2)
 // **********************************************************************
 void Process()
 {
-    if(player.inGame)
+    if(/*player.inGame*/true)
     {
         int i, j, k;
 
@@ -196,14 +197,20 @@ void MovePlayer()
     {
         Vector3 alfa = player.Move(deltaTime);
         Vector3 newPos = Vector3(player.position.x + alfa.x, player.position.y, player.position.z + alfa.z);
-        if(ga.CanMove(newPos))
+        /*if(ga.CanMove(newPos))
         {
             player.position = newPos;
             player.target->x += alfa.x;
             player.target->z += alfa.z;
 
             player.Discharge();
-        }
+        }*/
+
+        player.position = newPos;
+            player.target->x += alfa.x;
+            player.target->z += alfa.z;
+
+            player.Discharge();
     }
 }
 // **********************************************************************
@@ -254,7 +261,7 @@ void SetColor(string hex, ColorRGB &colorRGB)
 //      model: instancia do modelo a ser escrito
 //      name: nome do arquivo .tri
 // **********************************************************************
-void LoadModel(Model &model, const char* name)
+void LoadModel(Model &model, const char* name, float scale)
 {
     ifstream file;
     file.open(name);
@@ -263,6 +270,7 @@ void LoadModel(Model &model, const char* name)
     ColorRGB color;
     string hex;
     Vector3 vert;
+    Vector3 minVertex = Vector3(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF);
     Vector3 maxVertex = Vector3(0, 0, 0);
 
     if(file ==  NULL)
@@ -281,8 +289,17 @@ void LoadModel(Model &model, const char* name)
             file >> x;
             file >> y;
             file >> z;
-            vert = Vector3(x,y,z);
+
+            x *= scale;
+            y *= scale;
+            z *= scale;
+
+            vert = Vector3(x, y, z);
             model.triangles[triangle].SetVertex(vertex, vert);
+
+            if(x < minVertex.x) minVertex.x = x;
+            if(y < minVertex.y) minVertex.y = y;
+            if(z < minVertex.z) minVertex.z = z;
 
             if(x > maxVertex.x) maxVertex.x = x;
             if(y > maxVertex.y) maxVertex.y = y;
@@ -293,11 +310,15 @@ void LoadModel(Model &model, const char* name)
         SetColor(hex, color);
         model.triangles[triangle].color = color;
         GetNormalVector(model.triangles[triangle]);
-        model.width = maxVertex.x;
-        model.height = maxVertex.y;
-        model.depth = maxVertex.z;
     }
 
+    model.width = (maxVertex.x - minVertex.x)/2.0f;
+    model.height = (maxVertex.y - minVertex.y)/2.0f;
+    model.depth = (maxVertex.z - minVertex.z)/2.0f;
+
+    cout << "\n" << maxVertex.x << " " << maxVertex.y << " " << maxVertex.z << "\n";
+    cout << minVertex.x << " " << minVertex.y << " " << minVertex.z << "\n";
+    cout << model.width << " " << model.height << " " << model.depth << "\n";
     file.close();
 }
 // **********************************************************************
@@ -347,8 +368,7 @@ void GameManager::LoadScenario(char* fileName)
         file >> temp;
         file >> scale;
         nameModel = temp.c_str();
-        LoadModel(models[cont], nameModel);
-        models[cont].SetScale(scale);
+        LoadModel(models[cont], nameModel, scale);
         cont++;
     }
     //Le quantidade de spawners
@@ -358,8 +378,7 @@ void GameManager::LoadScenario(char* fileName)
     file >> scale;
     spawnerModel = new Model[1];
     nameModel = temp.c_str();
-    LoadModel(spawnerModel[0], nameModel);
-    spawnerModel[0].SetScale(scale);
+    LoadModel(spawnerModel[0], nameModel, scale);
     energySpawners = new EnergySpawner[spawnersCont];
     int spawner = 0;
     //Le quantidade de objetos
@@ -442,7 +461,7 @@ void Object::Render()
     {
         glTranslated(position.x,position.y,position.z);
         glRotatef(angle,0,1,0);
-        glScalef(model->scale, model->scale, model->scale);
+        //glScalef(model->scale, model->scale, model->scale);
         for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
         {
             glColor3f(model->triangles[triangle].color.r,
@@ -451,6 +470,23 @@ void Object::Render()
             DrawTriangle(model->triangles[triangle]);
 
         }
+
+        glBegin(GL_LINES);
+        {
+            glColor3f(1,0,0);
+            glVertex3f(-model->width, 0, -model->depth);
+            glVertex3f(-model->width, model->height*2, -model->depth);
+
+            glVertex3f(model->width, 0, -model->depth);
+            glVertex3f(model->width, model->height*2, -model->depth);
+
+            glVertex3f(model->width, 0, model->depth);
+            glVertex3f(model->width, model->height*2, model->depth);
+
+            glVertex3f(-model->width, 0, model->depth);
+            glVertex3f(-model->width, model->height*2, model->depth);
+        }
+        glEnd();
     }
     glPopMatrix();
 }
@@ -494,7 +530,6 @@ void DefineLuz(void)
   // concentrado ser‡ o brilho. (Valores v‡lidos: de 0 a 128)
   glMateriali(GL_FRONT,GL_SHININESS,51);
 }
-
 // **********************************************************************
 //  void init(void)
 //		Inicializa os parâmetros globais de OpenGL
@@ -518,29 +553,25 @@ void init(void)
     ga.LoadScenario("map.txt");
 
     ga.bulletModel = new Model[1];
-    LoadModel(ga.bulletModel[0], "bullet.tri");
-    ga.bulletModel[0].SetScale(0.3f);
+    LoadModel(ga.bulletModel[0], "bullet.tri", 0.3f);
     cout << "Bullet -> " << ga.bulletModel[0].width << " " << ga.bulletModel[0].height << " " << ga.bulletModel[0].depth << "\n";
 
     player.SetPosition(6,0,6);
     player.target = new Vector3(6,0,7);
     player.model = new Model[1];
-    LoadModel(player.model[0], "player.tri");
-    player.model->SetScale(0.2f);
+    LoadModel(player.model[0], "player.tri", 0.2f);
     cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
 
-    ga.enemysCont = 20;
+    ga.enemysCont = 10;
     ga.enemys = new EnemyShip[ga.enemysCont];
     ga.enemyModel = new Model[1];
-    LoadModel(ga.enemyModel[0], "enemy.tri");
-    ga.enemyModel[0].SetScale(0.1f);
+    LoadModel(ga.enemyModel[0], "enemy.tri", 0.5f);
     for(int i=0; i<ga.enemysCont; i++)
     {
         ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position), &(ga.bulletModel[0]));
     }
 
-    LoadModel(model, "gameover.tri");
-    model.SetScale(3.0f);
+    LoadModel(model, "gameover.tri", 3.0f);
     ga.gameoverObject.SetObject(Vector3(0,0,0), &model, 0);
 
 
@@ -559,6 +590,7 @@ void PosicUser()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
     if(status == INGAME)
     {
         glRotatef(player.angle*-1, 0,1,0);
@@ -593,12 +625,61 @@ void reshape( int w, int h )
 	PosicUser();
 
 }
+void DrawGrid()
+{
+    int i;
+    glBegin(GL_LINES);
+    {
+        glLineWidth(1);
+        glColor3f(0,0,1);
+
+        for(i=0; i<ga.MAXX; i+=10)
+        {
+            glVertex3f(i, 0, 0);
+            glVertex3f(i, 0, ga.MAXZ);
+            glVertex3f(0, 0, i);
+            glVertex3f(ga.MAXX, 0, i);
+
+            glVertex3f(i, ga.MAXY, 0);
+            glVertex3f(i, ga.MAXY, ga.MAXZ);
+            glVertex3f(0, ga.MAXY, i);
+            glVertex3f(ga.MAXX, ga.MAXY, i);
+
+            glVertex3f(i, 0, 0);
+            glVertex3f(i, ga.MAXY, 0);
+
+            glVertex3f(0, 0, i);
+            glVertex3f(0, ga.MAXY, i);
+
+            glVertex3f(i, 0, ga.MAXZ);
+            glVertex3f(i, ga.MAXY, ga.MAXZ);
+
+            glVertex3f(ga.MAXX, 0, i);
+            glVertex3f(ga.MAXX, ga.MAXY, i);
+        }
+
+        for(i=0; i<ga.MAXY; i+=10)
+        {
+            glVertex3f(0, i, 0);
+            glVertex3f(ga.MAXX, i, 0);
+
+            glVertex3f(0, i, 0);
+            glVertex3f(0, i, ga.MAXZ);
+
+            glVertex3f(0, i, ga.MAXZ);
+            glVertex3f(ga.MAXX, i, ga.MAXZ);
+
+            glVertex3f(ga.MAXX, i, ga.MAXZ);
+            glVertex3f(ga.MAXX, i, 0);
+        }
+    }
+    glEnd();
+}
 // **********************************************************************
 //  void display( void )
 // **********************************************************************
 void display( void )
 {
-
 	if(status == INGAME)
     {
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -609,6 +690,7 @@ void display( void )
         Process();
 
         ga.DrawScenario();
+        DrawGrid();
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

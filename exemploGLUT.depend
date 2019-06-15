@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1560616971 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1560637864 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -294,7 +294,7 @@
 
 1298986600 c:\users\vinic\desktop\git\trabalho2cg\include\gl\freeglut_ext.h
 
-1560476864 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
+1560616057 source:c:\users\vinic\desktop\git\trabalho2cg\src\vector3.cpp
 	"Vector3.h"
 	<math.h>
 
@@ -449,7 +449,7 @@
 	"Player.h"
 	<math.h>
 
-1560611970 source:c:\users\vinic\desktop\git\trabalho2cg\src\enemyship.cpp
+1560634677 source:c:\users\vinic\desktop\git\trabalho2cg\src\enemyship.cpp
 	<EnemyShip.h>
 	<stdlib.h>
 	<time.h>
@@ -476,7 +476,7 @@
 	<time.h>
 	<Vector3.h>
 
-1560611505 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
+1560634761 source:c:\users\vinic\desktop\git\trabalho2cg\src\bullet.cpp
 	"Bullet.h"
 	<math.h>
 	<Model.h>

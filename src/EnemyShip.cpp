@@ -159,19 +159,25 @@ void EnemyShip::SetNewBezie(float maxX, float maxY, float maxZ)
     p1.z = p3.z*2.0 - p2.z;
 
     p2.x = rand()% (int) maxX;
-    p2.y = rand()% (int) maxY+10;
+    p2.y = rand()% (int) maxY+15;
     p2.z = rand()% (int) maxZ;
 
-    p3.x = rand()% (int) maxX;
-    p3.y = rand()% (int) maxY+10;
-    p3.z = rand()% (int) maxZ;
+    srand(target->x);
+    if(rand()%2 == 0)
+    {
+        p3.x = rand()% (int) maxX;
+        p3.y = rand()% (int) maxY+15;
+        p3.z = rand()% (int) maxZ;
+    }else
+    {
+        p3.x = target->x;
+        p3.y = rand()% (int) maxY+15;
+        p3.z = target->z;
+    }
 }
 
 // **********************************************************************
 // ~EnemyShip()
 // Desconstrutor da Classe EnemyShip
 // **********************************************************************
-EnemyShip::~EnemyShip()
-{
-
-}
+EnemyShip::~EnemyShip(){}
