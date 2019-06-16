@@ -359,6 +359,34 @@ void GameManager::LoadScenario(char* fileName)
         return;
     }
 
+    file >> temp;
+    file >> scale;
+    nameModel = temp.c_str();
+    bulletModel = new Model[1];
+    LoadModel(bulletModel[0], nameModel, scale);
+
+    file >> temp;
+    file >> scale;
+    nameModel = temp.c_str();
+    player.model = new Model[1];
+    LoadModel(player.model[0], nameModel, scale);
+
+    file >> enemysCont;
+    file >> temp;
+    file >> scale;
+    nameModel = temp.c_str();
+    enemyModel = new Model[1];
+    enemys = new EnemyShip[enemysCont];
+    LoadModel(enemyModel[0], nameModel, scale);
+
+    for(int i=0; i<ga.enemysCont; i++)
+    {
+        enemys[i].SetEnemyShip(&(enemyModel[0]), &(player.position), &(bulletModel[0]));
+    }
+
+    LoadModel(model, "gameover.tri", 3.0f);
+    gameoverObject.SetObject(Vector3(0,0,0), &model, 0);
+
     //le quantidade de modelos
     file >> modelsCont;
     models = new Model[modelsCont];
@@ -551,30 +579,8 @@ void init(void)
 #endif
 
     ga.LoadScenario("map.txt");
-
-    ga.bulletModel = new Model[1];
-    LoadModel(ga.bulletModel[0], "bullet.tri", 0.3f);
-    cout << "Bullet -> " << ga.bulletModel[0].width << " " << ga.bulletModel[0].height << " " << ga.bulletModel[0].depth << "\n";
-
     player.SetPosition(6,0,6);
     player.target = new Vector3(6,0,7);
-    player.model = new Model[1];
-    LoadModel(player.model[0], "player.tri", 0.2f);
-    cout << "Player -> " << player.model->width << " " << player.model->height << " " << player.model->depth << "\n";
-
-    ga.enemysCont = 10;
-    ga.enemys = new EnemyShip[ga.enemysCont];
-    ga.enemyModel = new Model[1];
-    LoadModel(ga.enemyModel[0], "enemy.tri", 0.5f);
-    for(int i=0; i<ga.enemysCont; i++)
-    {
-        ga.enemys[i].SetEnemyShip(&(ga.enemyModel[0]), &(player.position), &(ga.bulletModel[0]));
-    }
-
-    LoadModel(model, "gameover.tri", 3.0f);
-    ga.gameoverObject.SetObject(Vector3(0,0,0), &model, 0);
-
-
     mainCamera->SetObserver(&(player.position), player.angle);
     mainCamera->SetTarget(player.target);
 }
