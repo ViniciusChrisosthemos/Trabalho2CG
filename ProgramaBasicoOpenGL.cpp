@@ -37,12 +37,12 @@ using namespace std;
 enum STATUS{GAMEOVER,INGAME};
 STATUS status = INGAME;
 GLfloat AspectRatio, AngY=0;
-Camera* mainCamera = new Camera(new Vector3(0,2,0), new Vector3(0,2,1));
 GameManager ga = GameManager();
 Player player = Player(10);
 Model model;
 float deltaTime = 0;
 bool debug = false;
+bool godMode = false;
 
 bool IsColliding(Object &obj1, Object &obj2);
 void LoadModel(Model &model, const char* name);
@@ -53,7 +53,6 @@ void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
 void MovePlayer();
 void DrawGUI();
-void Draw();
 void Process();
 void GameOver();
 
@@ -88,7 +87,7 @@ bool IsColliding(Object &obj1, Object &obj2)
 // **********************************************************************
 void Process()
 {
-    if(/*player.inGame*/true)
+    if(player.inGame | godMode)
     {
         int i, j, k;
 
@@ -135,6 +134,8 @@ void Process()
     }else
     {
         status = GAMEOVER;
+        debug = false;
+        godMode = false;
     }
 }
 // **********************************************************************
@@ -174,22 +175,22 @@ void MovePlayer()
 
     if(GetKeyState('I') & 0x8000)
     {
-        mainCamera->target->y += 5 * deltaTime;
+        player.target->y += 5 * deltaTime;
     }
 
     if(GetKeyState('J') & 0x8000)
     {
-        mainCamera->target->x += 5 * deltaTime;
+        player.target->x += 5 * deltaTime;
     }
 
     if(GetKeyState('K') & 0x8000)
     {
-        mainCamera->target->y -= 5 * deltaTime;
+        player.target->y -= 5 * deltaTime;
     }
 
     if(GetKeyState('L') & 0x8000)
     {
-        mainCamera->target->x -= 5 * deltaTime;
+        player.target->x -= 5 * deltaTime;
     }
 
 
@@ -197,20 +198,14 @@ void MovePlayer()
     {
         Vector3 alfa = player.Move(deltaTime);
         Vector3 newPos = Vector3(player.position.x + alfa.x, player.position.y, player.position.z + alfa.z);
-        /*if(ga.CanMove(newPos))
+        if(ga.CanMove(newPos) | godMode)
         {
             player.position = newPos;
             player.target->x += alfa.x;
             player.target->z += alfa.z;
 
             player.Discharge();
-        }*/
-
-        player.position = newPos;
-            player.target->x += alfa.x;
-            player.target->z += alfa.z;
-
-            player.Discharge();
+        }
     }
 }
 // **********************************************************************
@@ -315,10 +310,6 @@ void LoadModel(Model &model, const char* name, float scale)
     model.width = (maxVertex.x - minVertex.x)/2.0f;
     model.height = (maxVertex.y - minVertex.y)/2.0f;
     model.depth = (maxVertex.z - minVertex.z)/2.0f;
-
-    cout << "\n" << maxVertex.x << " " << maxVertex.y << " " << maxVertex.z << "\n";
-    cout << minVertex.x << " " << minVertex.y << " " << minVertex.z << "\n";
-    cout << model.width << " " << model.height << " " << model.depth << "\n";
     file.close();
 }
 // **********************************************************************
@@ -454,11 +445,12 @@ void GameManager::DrawScenario()
 {
     int i, j;
 
+    //Desenha Objetos estáticos
     for(i=0; i<objectsCont; i++)
     {
         objects[i].Render();
     }
-
+    //Desenha combustiveis
     for(i=0; i<spawnersCont; i++)
     {
         if(energySpawners[i].inGame)
@@ -466,7 +458,7 @@ void GameManager::DrawScenario()
             energySpawners[i].Render();
         }
     }
-
+    //Desenha inimigos
     for(i=0; i<enemysCont; i++)
     {
         ga.enemys[i].Render();
@@ -476,7 +468,7 @@ void GameManager::DrawScenario()
             if(ga.enemys[i].bullets[j].inGame) ga.enemys[i].bullets[j].Render();
         }
     }
-
+    //Desenha jogador
     player.Render();
 }
 // **********************************************************************
@@ -489,7 +481,6 @@ void Object::Render()
     {
         glTranslated(position.x,position.y,position.z);
         glRotatef(angle,0,1,0);
-        //glScalef(model->scale, model->scale, model->scale);
         for(unsigned int triangle = 0; triangle < model->modelSize; triangle++)
         {
             glColor3f(model->triangles[triangle].color.r,
@@ -498,23 +489,51 @@ void Object::Render()
             DrawTriangle(model->triangles[triangle]);
 
         }
-
-        glBegin(GL_LINES);
+        // Desenha o envelope dos objetos, caso o debug estaja ligado
+        if(debug)
         {
-            glColor3f(1,0,0);
-            glVertex3f(-model->width, 0, -model->depth);
-            glVertex3f(-model->width, model->height*2, -model->depth);
+            glBegin(GL_LINES);
+            {
+                float height = model->height*2;
+                glColor3f(1,0,0);
+                glVertex3f(-model->width, 0, -model->depth);
+                glVertex3f(-model->width, height, -model->depth);
 
-            glVertex3f(model->width, 0, -model->depth);
-            glVertex3f(model->width, model->height*2, -model->depth);
+                glVertex3f(model->width, 0, -model->depth);
+                glVertex3f(model->width, height, -model->depth);
 
-            glVertex3f(model->width, 0, model->depth);
-            glVertex3f(model->width, model->height*2, model->depth);
+                glVertex3f(model->width, 0, model->depth);
+                glVertex3f(model->width, height, model->depth);
 
-            glVertex3f(-model->width, 0, model->depth);
-            glVertex3f(-model->width, model->height*2, model->depth);
+                glVertex3f(-model->width, 0, model->depth);
+                glVertex3f(-model->width, height, model->depth);
+
+                glVertex3f(-model->width, 0 , -model->depth);
+                glVertex3f(model->width, 0 , -model->depth);
+
+                glVertex3f(model->width, 0 , -model->depth);
+                glVertex3f(model->width, 0 , model->depth);
+
+                glVertex3f(model->width, 0 , model->depth);
+                glVertex3f(-model->width, 0 , model->depth);
+
+                glVertex3f(-model->width, 0 , model->depth);
+                glVertex3f(-model->width, 0 , -model->depth);
+
+                glVertex3f(-model->width, height , -model->depth);
+                glVertex3f(model->width, height, -model->depth);
+
+                glVertex3f(model->width, height, -model->depth);
+                glVertex3f(model->width, height, model->depth);
+
+                glVertex3f(model->width, height, model->depth);
+                glVertex3f(-model->width, height, model->depth);
+
+                glVertex3f(-model->width, height, model->depth);
+                glVertex3f(-model->width, height, -model->depth);
+            }
+            glEnd();
         }
-        glEnd();
     }
     glPopMatrix();
 }
@@ -581,8 +600,6 @@ void init(void)
     ga.LoadScenario("map.txt");
     player.SetPosition(6,0,6);
     player.target = new Vector3(6,0,7);
-    mainCamera->SetObserver(&(player.position), player.angle);
-    mainCamera->SetTarget(player.target);
 }
 // **********************************************************************
 //  void PosicUser()
@@ -600,8 +617,8 @@ void PosicUser()
     if(status == INGAME)
     {
         glRotatef(player.angle*-1, 0,1,0);
-        gluLookAt(mainCamera->observer->x, mainCamera->observer->y+2, mainCamera->observer->z,
-                  mainCamera->target->x, mainCamera->target->y+2, mainCamera->target->z,
+        gluLookAt(player.position.x, player.position.y+2, player.position.z,
+                  player.target->x, player.target->y+2, player.target->z,
                       0.0f,1.0f,0.0f);
     }else
     {
@@ -631,6 +648,10 @@ void reshape( int w, int h )
 	PosicUser();
 
 }
+// **********************************************************************
+// void DrawGrid()
+// Desenha os limites do cenário
+// **********************************************************************
 void DrawGrid()
 {
     int i;
@@ -763,6 +784,12 @@ void keyboard ( unsigned char key, int x, int y )
         case 27:        // Termina o programa qdo
           exit ( 0 );   // a tecla ESC for pressionada
           break;
+        case 'o': //God mode
+          if(status == INGAME) godMode = !godMode;
+          break;
+        case 'p': //debug
+          if(status == INGAME) debug = !debug;
+          break;
     default:
             cout << key;
       break;
@@ -780,10 +807,8 @@ void arrow_keys ( int a_keys, int x, int y )
 	    case GLUT_KEY_DOWN:
 			break;
         case GLUT_KEY_LEFT:
-            mainCamera->angle -= 10;
 			break;
         case GLUT_KEY_RIGHT:
-            mainCamera->angle += 10;
 			break;
 		default:
 			break;

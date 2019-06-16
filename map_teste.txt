@@ -1,21 +1,46 @@
-1
+bullet.tri 0.3
+player.tri 0.2
+10
+enemy.tri 0.5
+8
 house1.tri 0.009
-0
+house2.tri 0.009
+house3.tri 0.009
+house4.tri 0.009
+barrel.tri 0.03
+pine_1.tri 0.007
+church.tri 0.007
+sentinel_tower.tri 0.02
+7
 oil.tri 3
-1
-10 10 10 2
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 1 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
+12
+20 50 20 5
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 2 0 0 0 -1 0 0 0 0 0 0
+0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 3 0 0 0 0 2 0 0 0 -1 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 2 0 0 0 1 0 0 0 0 3 0 0 0 0 0 0 0 -1 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 1 0 0 0 0 0 0 0 7 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -1 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 -1 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 # Parametros
+- Modelo dos disparos com sua escala
+- Modelo do jogador com sua escala
+- Quantidade de inimigos no jogo
+- Modelo de inimigo com sua escala
 - Quantidade de modelos
 - Sequência dos nomes dos modelos com sua escala
 - Quantidade de caixas de combustivel

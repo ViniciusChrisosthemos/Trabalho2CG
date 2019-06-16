@@ -19,7 +19,7 @@ EnergySpawner::EnergySpawner(Model *model, Vector3 position)
     time(0);
 
     angle = 0.0f;
-    countdown = 5;
+    countdown = 15;
     energyCharge = 50;
     inGame = true;
     time(&currentTime);
