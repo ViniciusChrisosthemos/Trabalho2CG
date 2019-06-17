@@ -37,6 +37,20 @@ void Triangle::SetVertex(int v, Vector3 &vertex)
     vertexs[v] = vertex;
 }
 // **********************************************************************
+// void Triangle::NormalizeVertexs(float offset)
+// Método que normaliza os verteces do objeto, deixando-os em relação a base
+// Parametros:
+//      offset: quantidade necessria para deixar o objeto na base
+// **********************************************************************
+void Triangle::NormalizeVertexs(float offset)
+{
+    for(int i=0; i<3; i++)
+    {
+        vertexs[i].y += offset;
+    }
+}
+
+// **********************************************************************
 // Triangle::~Triangle()
 // Desconstrutor
 // **********************************************************************

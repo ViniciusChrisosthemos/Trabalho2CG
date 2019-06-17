@@ -17,6 +17,7 @@ class Triangle
         Triangle();
         void SetNormal(float x, float y, float z);
         void SetVertex(int v, Vector3 &vertex);
+        void NormalizeVertexs(float offset);
         virtual ~Triangle();
 
     protected:

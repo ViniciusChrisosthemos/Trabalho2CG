@@ -51,6 +51,7 @@ void DrawTriangle(const Triangle &triangle);
 void SetColor(string hex, ColorRGB &colorRGB);
 void GetNormalVector(Triangle &triangle);
 void ProdVector(const Vector3* v1, const Vector3* v2, Vector3 &prodVect);
+void NormalizeModel(Model &model);
 void MovePlayer();
 void DrawGUI();
 void Process();
@@ -330,6 +331,17 @@ void DrawTriangle(const Triangle &triangle)
     glEnd();
 }
 // **********************************************************************
+//  void NormalizeModel(Model &model)
+//  Normaliza um modelo, deixando os vertex posicionados em relação a sua base
+// **********************************************************************
+void NormalizeModel(Model &model)
+{
+    for(unsigned int i=0; i<model.modelSize; i++)
+    {
+        model.triangles[i].NormalizeVertexs(model.height);
+    }
+}
+// **********************************************************************
 //  void GameManager::LoadScenario(string fileName)
 //  Carrega os modelos e objetos que estaram no cenario
 //  Parametros:
@@ -355,6 +367,7 @@ void GameManager::LoadScenario(char* fileName)
     nameModel = temp.c_str();
     bulletModel = new Model[1];
     LoadModel(bulletModel[0], nameModel, scale);
+    NormalizeModel(bulletModel[0]);
 
     file >> temp;
     file >> scale;
@@ -369,6 +382,7 @@ void GameManager::LoadScenario(char* fileName)
     enemyModel = new Model[1];
     enemys = new EnemyShip[enemysCont];
     LoadModel(enemyModel[0], nameModel, scale);
+    NormalizeModel(enemyModel[0]);
 
     for(int i=0; i<ga.enemysCont; i++)
     {
