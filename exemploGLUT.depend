@@ -264,7 +264,7 @@
 	<_mingw.h>
 	<stdlib.h>
 
-1560651793 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
+1560814230 source:c:\users\vinic\desktop\git\trabalho2cg\programabasicoopengl.cpp
 	<iostream>
 	<cmath>
 	<ctime>
@@ -312,12 +312,12 @@
 	<Vector3.h>
 	<Model.h>
 
-1560615115 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
+1560813475 source:c:\users\vinic\desktop\git\trabalho2cg\src\triangle.cpp
 	"Triangle.h"
 	<Vector3.h>
 	<ColorRGB.h>
 
-1558397025 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
+1560813474 c:\users\vinic\desktop\git\trabalho2cg\include\triangle.h
 	<Vector3.h>
 	<ColorRGB.h>
 
@@ -456,7 +456,7 @@
 	"Player.h"
 	<math.h>
 
-1560638615 source:c:\users\vinic\desktop\git\trabalho2cg\src\enemyship.cpp
+1560815152 source:c:\users\vinic\desktop\git\trabalho2cg\src\enemyship.cpp
 	<EnemyShip.h>
 	<stdlib.h>
 	<time.h>
@@ -465,7 +465,7 @@
 	<stdio.h>
 	<Model.h>
 
-1560517712 c:\users\vinic\desktop\git\trabalho2cg\include\enemyship.h
+1560815073 c:\users\vinic\desktop\git\trabalho2cg\include\enemyship.h
 	<Object.h>
 	<time.h>
 	<Vector3.h>

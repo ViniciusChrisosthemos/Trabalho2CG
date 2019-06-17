@@ -49,7 +49,6 @@
 		</Linker>
 		<Unit filename="ProgramaBasicoOpenGL.cpp" />
 		<Unit filename="include/Bullet.h" />
-		<Unit filename="include/Camera.h" />
 		<Unit filename="include/ColorRGB.h" />
 		<Unit filename="include/EnemyShip.h" />
 		<Unit filename="include/EnergySpawner.h" />
@@ -70,7 +69,6 @@
 		<Unit filename="include/jversion.h" />
 		<Unit filename="include/xjinclude.h" />
 		<Unit filename="src/Bullet.cpp" />
-		<Unit filename="src/Camera.cpp" />
 		<Unit filename="src/ColorRGB.cpp" />
 		<Unit filename="src/EnemyShip.cpp" />
 		<Unit filename="src/EnergySpawner.cpp" />

@@ -351,6 +351,7 @@ void GameManager::LoadScenario(char* fileName)
 {
     ifstream file(fileName);
     string temp;
+    Vector3 initPosEnemys;
     const char* nameModel;
     float scale;
     int cont = 0;
@@ -383,11 +384,6 @@ void GameManager::LoadScenario(char* fileName)
     enemys = new EnemyShip[enemysCont];
     LoadModel(enemyModel[0], nameModel, scale);
     NormalizeModel(enemyModel[0]);
-
-    for(int i=0; i<ga.enemysCont; i++)
-    {
-        enemys[i].SetEnemyShip(&(enemyModel[0]), &(player.position), &(bulletModel[0]));
-    }
 
     LoadModel(model, "gameover.tri", 3.0f);
     gameoverObject.SetObject(Vector3(0,0,0), &model, 0);
@@ -425,6 +421,7 @@ void GameManager::LoadScenario(char* fileName)
     halfCell = sizeCell/2;
     MAXX = XMATRIX * sizeCell;
     MAXZ = ZMATRIX * sizeCell;
+    initPosEnemys = Vector3(MAXX, MAXY, MAXZ);
     //Cria os objetos
     objects = new Object[objectsCont];
     currentObj = 0;
@@ -449,6 +446,13 @@ void GameManager::LoadScenario(char* fileName)
             }
         }
     }
+
+
+    for(int i=0; i<ga.enemysCont; i++)
+    {
+        enemys[i].SetEnemyShip(&(enemyModel[0]), &(player.position), &(bulletModel[0]), initPosEnemys);
+    }
+
     file.close();
 }
 // **********************************************************************

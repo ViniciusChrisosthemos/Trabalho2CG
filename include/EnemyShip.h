@@ -25,7 +25,7 @@ class EnemyShip : public Object
         time_t currentTime;
 
         EnemyShip();
-        void SetEnemyShip(Model* model, Vector3* target, Model* bulletModel);
+        void SetEnemyShip(Model* model, Vector3* target, Model* bulletModel, Vector3 initPos);
         void MoveEShip(float deltaTime);
         bool BezieCompleted();
         void SetNewBezie(float maxX, float maxY, float maxZ);

@@ -22,22 +22,23 @@ EnemyShip::EnemyShip()
 //      model: modelo do objeto para ser renderizado
 //      target: alvo em que a nave inimiga irá perseguir
 //      bulletModel: modelo do disparo da nave para ser renderizado
+//      initPos: posição injcial da nave
 // **********************************************************************
-void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel)
+void EnemyShip::SetEnemyShip(Model* model, Vector3* target, Model* bulletModel, Vector3 initPos)
 {
         this->target = target;
         this->model = model;
         this->bulletModel = bulletModel;
-        position = Vector3(0,5,0);
-        p0 = Vector3(0,5,0);
-        p1 = Vector3(0,5,0);
-        p2 = Vector3(0,5,0);
-        p3 = Vector3(0,5,0);
+        position = initPos;
+        p0 = initPos;
+        p1 = initPos;
+        p2 = initPos;
+        p3 = initPos;
         fireRate = rand()%3 + 2;
         time(NULL);
         time(&currentTime);
         nextShoot = currentTime + fireRate;
-        t = 0;
+        t = 1;
         speed = rand()%3 + 3;
 
         MAXBULLETS = 3;
